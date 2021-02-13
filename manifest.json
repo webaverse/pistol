@@ -5,8 +5,8 @@
   "start_url": "pistol.glb",
   "components": [
     {
-      "type": "wear",
-      "position": [0, 0, 0]
+      "type": "gun",
+      "gunAnimation": "pistol"
     }
   ]
 }
