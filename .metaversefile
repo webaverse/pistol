@@ -1,7 +1,6 @@
 {
   "name": "pistol",
   "description": "Pistol XRPackage",
-  "xr_type": "webxr-site@0.0.1",
   "start_url": "pistol.glb",
   "components": [
     {
