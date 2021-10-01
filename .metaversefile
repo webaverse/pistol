@@ -1,12 +1,25 @@
 {
   "name": "pistol",
-  "description": "Pistol XRPackage",
-  "start_url": "pistol.glb",
+  "start_url": "military.glb",
   "components": [
     {
-      "type": "use",
-      "subtype": "gun",
-      "useAnimation": "pistol"
+      "key": "wear",
+      "value": {
+        "boneAttachment": "leftHand",
+        "position": [-0.04, -0.03, -0.02],
+        "quaternion": [0.5, -0.5, -0.5, 0.5],
+        "scale": [1, 1, 1]
+      }
+    },
+    {
+      "key": "use",
+      "value": {
+        "animation": "pistol",
+        "boneAttachment": "leftHand",
+        "position": [-0.04, -0.03, -0.02],
+        "quaternion": [0.5, -0.5, -0.5, 0.5],
+        "scale": [1, 1, 1]
+      }
     }
   ]
 }
