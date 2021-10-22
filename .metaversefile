@@ -1,6 +1,6 @@
 {
   "name": "pistol",
-  "start_url": "military.glb",
+  "start_url": "index.js",
   "components": [
     {
       "key": "wear",
@@ -12,14 +12,12 @@
       }
     },
     {
+      "key": "aim",
+      "value": {}
+    },
+    {
       "key": "use",
-      "value": {
-        "animation": "pistol",
-        "boneAttachment": "leftHand",
-        "position": [-0.04, -0.03, -0.02],
-        "quaternion": [0.5, -0.5, -0.5, 0.5],
-        "scale": [1, 1, 1]
-      }
+      "value": {}
     }
   ]
 }
