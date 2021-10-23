@@ -1,23 +1,4 @@
 {
   "name": "pistol",
-  "start_url": "index.js",
-  "components": [
-    {
-      "key": "wear",
-      "value": {
-        "boneAttachment": "leftHand",
-        "position": [-0.04, -0.03, -0.01],
-        "quaternion": [0.5, -0.5, -0.5, 0.5],
-        "scale": [1, 1, 1]
-      }
-    },
-    {
-      "key": "aim",
-      "value": {}
-    },
-    {
-      "key": "use",
-      "value": {}
-    }
-  ]
+  "start_url": "index.js"
 }
