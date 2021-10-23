@@ -86,7 +86,9 @@ export default () => {
         },
         {
           "key": "use",
-          "value": {}
+          "value": {
+            "subtype": "pistol"
+          }
         }
       ];
       
