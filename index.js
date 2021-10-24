@@ -158,7 +158,7 @@ export default () => {
     }
   })();
   
-  app.getPhysicsObjects = () => {
+  /* app.getPhysicsObjects = () => {
     const result = [];
     for (const subApp of subApps) {
       if (subApp) {
@@ -166,7 +166,7 @@ export default () => {
       }
     }
     return result;
-  };
+  }; */
   
   useActivate(() => {
     for (const subApp of subApps) {
