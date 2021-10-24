@@ -32,6 +32,7 @@ export default () => {
       const subApp = metaversefile.createApp({
         name: u2,
       });
+      subApp.contentId = u2;
       subApp.instanceId = getNextInstanceId();
       subApp.position.copy(app.position);
       subApp.quaternion.copy(app.quaternion);
@@ -66,6 +67,10 @@ export default () => {
         {
           "key": "instanceId",
           "value": getNextInstanceId(),
+        },
+        {
+          "key": "contentId",
+          "value": u2,
         },
         {
           "key": "physics",
