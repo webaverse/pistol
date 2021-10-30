@@ -4,8 +4,12 @@ const {useApp, useFrame, useActivate, useWear, useUse, usePhysics, getNextInstan
 
 const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
 
+const localVector = new THREE.Vector3();
 const upVector = new THREE.Vector3(0, 1, 0);
 const z180Quaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
+const muzzleOffset = new THREE.Vector3(0, 0.1, 0.25);
+const muzzleFlashTime = 300;
+const bulletSparkTime = 300;
 
 export default () => {
   const app = useApp();
@@ -19,6 +23,25 @@ export default () => {
     app.matrix.copy(subApp.matrix);
     app.matrixWorld.copy(subApp.matrixWorld);
   }; */
+  
+  let pointLights = [];
+  const gunPointLight = new THREE.PointLight(0xFFFFFF, 5);
+  gunPointLight.castShadow = false; 
+  gunPointLight.startTime = 0;
+  gunPointLight.endTime = 0;
+  gunPointLight.initialIntensity = gunPointLight.intensity;
+  const world = useWorld();
+  const worldLights = world.getLights();
+  worldLights.add(gunPointLight);
+  pointLights.push(gunPointLight);
+  
+  const bulletPointLight = new THREE.PointLight(0xef5350, 5, 10);
+  bulletPointLight.castShadow = false;
+  bulletPointLight.startTime = 0;
+  bulletPointLight.endTime = 0;
+  bulletPointLight.initialIntensity = bulletPointLight.intensity;
+  worldLights.add(bulletPointLight);
+  pointLights.push(bulletPointLight);
 
   const subApps = [];
   (async () => {
@@ -105,6 +128,8 @@ export default () => {
       
       subApp.addEventListener('use', e => {
         const explosionApp = subApps[0];
+        
+        // muzzle flash
         {
           explosionApp.position.copy(subApp.position)
             .add(
@@ -119,7 +144,12 @@ export default () => {
           explosionApp.setComponent('gravity', 0.5);
           explosionApp.setComponent('rate', 5);
           explosionApp.use();
+          
+          gunPointLight.startTime = performance.now();
+          gunPointLight.endTime = gunPointLight.startTime + muzzleFlashTime;
         }
+        
+        // bullet hit
         {
           const result = physics.raycast(subApp.position, subApp.quaternion.clone().multiply(z180Quaternion));
           if (result) {
@@ -140,6 +170,10 @@ export default () => {
             explosionApp.setComponent('gravity', -0.5);
             explosionApp.setComponent('rate', 0.5);
             explosionApp.use();
+            
+            bulletPointLight.position.copy(explosionApp.position);
+            bulletPointLight.startTime = performance.now();
+            bulletPointLight.endTime = bulletPointLight.startTime + bulletSparkTime;
           
             const targetApp = getAppByPhysicsId(result.objectId);
             if (targetApp) {
@@ -167,6 +201,20 @@ export default () => {
     }
     return result;
   }; */
+  
+  useFrame(({timestamp}) => {
+    const gunApp = subApps[1];
+    if (gunApp) {
+      gunPointLight.position.copy(gunApp.position)
+        .add(localVector.copy(muzzleOffset).applyQuaternion(gunApp.quaternion));
+      gunPointLight.updateMatrixWorld();
+    }
+      
+    for (const pointLight of pointLights) {
+      const factor = Math.min(Math.max((timestamp - pointLight.startTime) / (pointLight.endTime - pointLight.startTime), 0), 1);
+      pointLight.intensity = pointLight.initialIntensity * (1 - Math.pow(factor, 0.5));
+    }
+  });
   
   useActivate(() => {
     for (const subApp of subApps) {
