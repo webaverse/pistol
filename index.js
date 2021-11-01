@@ -13,6 +13,8 @@ const bulletSparkTime = 300;
 
 export default () => {
   const app = useApp();
+  app.name = 'pistol';
+
   const physics = usePhysics();
   
   /* const _updateSubAppMatrix = subApp => {
@@ -43,7 +45,9 @@ export default () => {
   worldLights.add(bulletPointLight);
   pointLights.push(bulletPointLight);
 
-  const subApps = [];
+  let gunApp = null;
+  let explosionApp = null;
+  let subApps = [null, null];
   (async () => {
     {
       let u2 = `https://webaverse.github.io/pixelsplosion/`;
@@ -52,23 +56,20 @@ export default () => {
       }
       const m = await metaversefile.import(u2);
       // console.log('group objects 3', u2, m);
-      const subApp = metaversefile.createApp({
+      explosionApp = metaversefile.createApp({
         name: u2,
       });
-      subApp.contentId = u2;
-      subApp.instanceId = getNextInstanceId();
-      subApp.position.copy(app.position);
-      subApp.quaternion.copy(app.quaternion);
-      subApp.scale.copy(app.scale);
-      subApp.updateMatrixWorld();
+      explosionApp.contentId = u2;
+      explosionApp.instanceId = getNextInstanceId();
+      explosionApp.position.copy(app.position);
+      explosionApp.quaternion.copy(app.quaternion);
+      explosionApp.scale.copy(app.scale);
+      explosionApp.updateMatrixWorld();
+      explosionApp.name = 'explosion';
+      subApps[0] = explosionApp;
 
-      await subApp.addModule(m);
-      metaversefile.addApp(subApp);
-      subApps.push(subApp);
-      
-      /* setInterval(() => {
-        subApp.activate();
-      }, 2000); */
+      await explosionApp.addModule(m);
+      metaversefile.addApp(explosionApp);
       
     }
     
@@ -78,13 +79,15 @@ export default () => {
         u2 = '/@proxy/' + u2;
       }
       const m = await metaversefile.import(u2);
-      const subApp = metaversefile.createApp({
+      const gunApp = metaversefile.createApp({
         name: u2,
       });
-      subApp.position.copy(app.position);
-      subApp.quaternion.copy(app.quaternion);
-      subApp.scale.copy(app.scale);
-      subApp.updateMatrixWorld();
+      gunApp.position.copy(app.position);
+      gunApp.quaternion.copy(app.quaternion);
+      gunApp.scale.copy(app.scale);
+      gunApp.updateMatrixWorld();
+      gunApp.name = 'gun';
+      subApps[1] = gunApp;
       
       const components = [
         {
@@ -121,23 +124,21 @@ export default () => {
       ];
       
       for (const {key, value} of components) {
-        subApp.setComponent(key, value);
+        gunApp.setComponent(key, value);
       }
-      await subApp.addModule(m);
-      metaversefile.addApp(subApp);
+      await gunApp.addModule(m);
+      metaversefile.addApp(gunApp);
       
-      subApp.addEventListener('use', e => {
-        const explosionApp = subApps[0];
-        
+      gunApp.addEventListener('use', e => {
         // muzzle flash
         {
-          explosionApp.position.copy(subApp.position)
+          explosionApp.position.copy(gunApp.position)
             .add(
               new THREE.Vector3(0, 0.1, 0.25)
-                .applyQuaternion(subApp.quaternion)
+                .applyQuaternion(gunApp.quaternion)
             );
-          explosionApp.quaternion.copy(subApp.quaternion);
-          explosionApp.scale.copy(subApp.scale);
+          explosionApp.quaternion.copy(gunApp.quaternion);
+          explosionApp.scale.copy(gunApp.scale);
           explosionApp.updateMatrixWorld();
           explosionApp.setComponent('color1', 0x808080);
           explosionApp.setComponent('color2', 0x000000);
@@ -151,7 +152,7 @@ export default () => {
         
         // bullet hit
         {
-          const result = physics.raycast(subApp.position, subApp.quaternion.clone().multiply(z180Quaternion));
+          const result = physics.raycast(gunApp.position, gunApp.quaternion.clone().multiply(z180Quaternion));
           if (result) {
             explosionApp.position.fromArray(result.point);
             const normal = new THREE.Vector3().fromArray(result.normal);
@@ -163,7 +164,7 @@ export default () => {
                 upVector
               )
             );
-            // explosionApp.scale.copy(subApp.scale);
+            // explosionApp.scale.copy(gunApp.scale);
             explosionApp.updateMatrixWorld();
             explosionApp.setComponent('color1', 0xef5350);
             explosionApp.setComponent('color2', 0x000000);
@@ -187,12 +188,10 @@ export default () => {
           }
         }
       });
-      
-      subApps.push(subApp);
     }
   })();
   
-  /* app.getPhysicsObjects = () => {
+  app.getPhysicsObjects = () => {
     const result = [];
     for (const subApp of subApps) {
       if (subApp) {
@@ -200,10 +199,9 @@ export default () => {
       }
     }
     return result;
-  }; */
+  };
   
   useFrame(({timestamp}) => {
-    const gunApp = subApps[1];
     if (gunApp) {
       gunPointLight.position.copy(gunApp.position)
         .add(localVector.copy(muzzleOffset).applyQuaternion(gunApp.quaternion));
@@ -217,16 +215,17 @@ export default () => {
   });
   
   useActivate(() => {
+    // console.log('activate', subApps);
     for (const subApp of subApps) {
       subApp && subApp.activate();
     }
   });
   
-  useWear(() => {
+  /* useWear(() => {
     for (const subApp of subApps) {
       subApp && subApp.wear();
     }
-  });
+  }); */
   
   useUse(() => {
     for (const subApp of subApps) {
