@@ -79,7 +79,7 @@ export default () => {
         u2 = '/@proxy/' + u2;
       }
       const m = await metaversefile.import(u2);
-      const gunApp = metaversefile.createApp({
+      gunApp = metaversefile.createApp({
         name: u2,
       });
       gunApp.position.copy(app.position);
