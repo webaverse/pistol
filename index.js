@@ -177,7 +177,7 @@ export default () => {
             bulletPointLight.endTime = bulletPointLight.startTime + bulletSparkTime;
           
             const targetApp = getAppByPhysicsId(result.objectId);
-            if (targetApp && targetApp.hit) {
+            if (targetApp) {
               const damage = 2;
               targetApp.hit(damage, {
                 collisionId: targetApp.willDieFrom(damage) ? result.objectId : null,
