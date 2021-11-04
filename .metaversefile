@@ -1,4 +1,16 @@
 {
   "name": "pistol",
-  "start_url": "index.js"
+  "start_url": "index.js",
+  "components": [
+    {
+      "key": "aim",
+      "value": true
+    },
+    {
+      "key": "use",
+      "value": {
+        "subtype": "pistol"
+      }
+    }
+  ]
 }
