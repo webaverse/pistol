@@ -226,8 +226,11 @@ export default () => {
   });
   
   useUse(() => {
-    for (const subApp of subApps) {
+    /* for (const subApp of subApps) {
       subApp && subApp.use();
+    } */
+    if (gunApp) {
+      gunApp.use();
     }
   });
   
