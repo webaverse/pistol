@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import metaversefile from 'metaversefile';
-const {useApp, useFrame, useActivate, useWear, useUse, usePhysics, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup} = metaversefile;
+const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysics, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup} = metaversefile;
 
 const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
 
@@ -216,16 +216,25 @@ export default () => {
   
   useActivate(() => {
     // console.log('activate', subApps);
-    for (const subApp of subApps) {
+    /* for (const subApp of subApps) {
       subApp && subApp.activate();
-    }
+    } */
+    
+    const localPlayer = useLocalPlayer();
+    localPlayer.wear(app);
   });
   
-  /* useWear(() => {
+  useWear(e => {
+    const {wear} = e;
     for (const subApp of subApps) {
-      subApp && subApp.wear();
+      // subApp && subApp.wear();
+      // XXX dispatch wear update to subapps
+      subApp.dispatchEvent({
+        type: 'wearupdate',
+        wear,
+      });
     }
-  }); */
+  });
   
   useUse(() => {
     for (const subApp of subApps) {
