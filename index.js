@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import metaversefile from 'metaversefile';
-const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysics, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup} = metaversefile;
+const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysics, useScene, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup} = metaversefile;
 
 const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
 
@@ -11,11 +11,15 @@ const muzzleOffset = new THREE.Vector3(0, 0.1, 0.25);
 const muzzleFlashTime = 300;
 const bulletSparkTime = 300;
 
+const emptyArray = [];
+const fnEmptyArray = () => emptyArray;
+
 export default () => {
   const app = useApp();
   app.name = 'pistol';
 
   const physics = usePhysics();
+  const scene = useScene();
   
   /* const _updateSubAppMatrix = subApp => {
     subApp.updateMatrixWorld();
@@ -69,7 +73,8 @@ export default () => {
       subApps[0] = explosionApp;
 
       await explosionApp.addModule(m);
-      metaversefile.addApp(explosionApp);
+      scene.add(explosionApp);
+      // metaversefile.addApp(explosionApp);
       
     }
     
@@ -87,6 +92,8 @@ export default () => {
       gunApp.scale.copy(app.scale);
       gunApp.updateMatrixWorld();
       gunApp.name = 'gun';
+      gunApp.getPhysicsObjectsOriginal = gunApp.getPhysicsObjects;
+      gunApp.getPhysicsObjects = fnEmptyArray;
       subApps[1] = gunApp;
       
       const components = [
@@ -127,7 +134,8 @@ export default () => {
         gunApp.setComponent(key, value);
       }
       await gunApp.addModule(m);
-      metaversefile.addApp(gunApp);
+      scene.add(gunApp);
+      // metaversefile.addApp(gunApp);
       
       gunApp.addEventListener('use', e => {
         // muzzle flash
@@ -192,13 +200,7 @@ export default () => {
   })();
   
   app.getPhysicsObjects = () => {
-    const result = [];
-    for (const subApp of subApps) {
-      if (subApp) {
-        result.push.apply(result, subApp.getPhysicsObjects());
-      }
-    }
-    return result;
+    return gunApp ? gunApp.getPhysicsObjectsOriginal() : [];
   };
   
   useFrame(({timestamp}) => {
@@ -245,7 +247,8 @@ export default () => {
   useCleanup(() => {
     for (const subApp of subApps) {
       if (subApp) {
-        metaversefile.removeApp(subApp);
+        // metaversefile.removeApp(subApp);
+        scene.remove(subApp);
         subApp.destroy();
       }
     }
