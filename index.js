@@ -203,19 +203,6 @@ export default () => {
     return gunApp ? gunApp.getPhysicsObjectsOriginal() : [];
   };
   
-  useFrame(({timestamp}) => {
-    if (gunApp) {
-      gunPointLight.position.copy(gunApp.position)
-        .add(localVector.copy(muzzleOffset).applyQuaternion(gunApp.quaternion));
-      gunPointLight.updateMatrixWorld();
-    }
-      
-    for (const pointLight of pointLights) {
-      const factor = Math.min(Math.max((timestamp - pointLight.startTime) / (pointLight.endTime - pointLight.startTime), 0), 1);
-      pointLight.intensity = pointLight.initialIntensity * (1 - Math.pow(factor, 0.5));
-    }
-  });
-  
   useActivate(() => {
     // console.log('activate', subApps);
     /* for (const subApp of subApps) {
@@ -226,21 +213,46 @@ export default () => {
     localPlayer.wear(app);
   });
   
+  let wearing = false;
   useWear(e => {
     const {wear} = e;
     for (const subApp of subApps) {
-      // subApp && subApp.wear();
-      // XXX dispatch wear update to subapps
       subApp.dispatchEvent({
         type: 'wearupdate',
         wear,
       });
     }
+    wearing = wear;
   });
   
   useUse(() => {
     for (const subApp of subApps) {
       subApp && subApp.use();
+    }
+  });
+  
+  useFrame(({timestamp}) => {
+    if (!wearing) {
+      if (gunApp) {
+        gunApp.position.copy(app.position);
+        gunApp.quaternion.copy(app.quaternion);
+      }
+    } else {
+      if (gunApp) {
+        app.position.copy(gunApp.position);
+        app.quaternion.copy(gunApp.quaternion);
+      }
+    }
+    
+    if (gunApp) {
+      gunPointLight.position.copy(gunApp.position)
+        .add(localVector.copy(muzzleOffset).applyQuaternion(gunApp.quaternion));
+      gunPointLight.updateMatrixWorld();
+    }
+      
+    for (const pointLight of pointLights) {
+      const factor = Math.min(Math.max((timestamp - pointLight.startTime) / (pointLight.endTime - pointLight.startTime), 0), 1);
+      pointLight.intensity = pointLight.initialIntensity * (1 - Math.pow(factor, 0.5));
     }
   });
   
