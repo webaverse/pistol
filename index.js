@@ -95,9 +95,10 @@ export default () => {
       const tex = new THREE.Texture();
       tex.wrapS = THREE.RepeatWrapping;
       tex.wrapT = THREE.RepeatWrapping;
-    
+      tex.encoding = THREE.sRGBEncoding;
       tex.image = img;
       tex.needsUpdate = true;
+      console.log(tex)
       const material = new THREE.MeshPhysicalMaterial({map:tex})
       return material;
     })();
