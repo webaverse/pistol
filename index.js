@@ -164,15 +164,18 @@ export default () => {
           if (result) {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
+            const newNormalVec = normal.add(upVector);
             const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
               const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true});
               const plane = new THREE.Mesh( planeGeo, material);
-              plane.position.fromArray(result.point);
+              const newPointVec = new THREE.Vector3().fromArray(result.point);
+              const modiPoint = newPointVec.add(upVector);
+              plane.position.fromArray(modiPoint);
               plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
                 plane.position,
-                plane.position.clone().sub(normal),
+                plane.position.clone().sub(newNormalVec),
                 upVector
               ))
               debugger;
