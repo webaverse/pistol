@@ -167,7 +167,6 @@ export default () => {
             const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
             const mat = new THREE.MeshPhysicalMaterial({color: 0x000000});
             const plane = new THREE.Mesh( planeGeo, mat );
-
             plane.position.fromArray(result.point);
             plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
               plane.position,
@@ -175,9 +174,10 @@ export default () => {
               upVector
             ))
             
-            plane.parent = explosionApp.parent;
+            scene.add(plane);
             debugger;
-            console.log(plane)
+            console.log(plane, "v0")
+            plane.updateMatrix();
 
             explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
