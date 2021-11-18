@@ -18,6 +18,7 @@ export default () => {
   const app = useApp();
   app.name = 'pistol';
 
+  const bulletHoleTexture = new THREE.TextureLoader().load('bullet.png' );
   const physics = usePhysics();
   const scene = useScene();
   
@@ -165,7 +166,7 @@ export default () => {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
             const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
-            const mat = new THREE.MeshPhysicalMaterial({color: 0x000000});
+            const mat = new THREE.MeshPhysicalMaterial({color: 0x000000, map: bulletHoleTexture});
             const plane = new THREE.Mesh( planeGeo, mat );
             plane.position.fromArray(result.point);
             plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
