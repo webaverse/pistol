@@ -80,28 +80,11 @@ export default () => {
 
     
   const bulletMateial = (() => {
-    const u = `${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bullet.png`;
-    (async () => {
-      const img = await new Promise((accept, reject) => {
-        const img = new Image();
-        img.onload = () => {
-          accept(img);
-        };
-        img.onerror = reject;
-        img.crossOrigin = 'Anonymous';
-        img.src = u;
-      });
-
-      const tex = new THREE.Texture();
-      tex.wrapS = THREE.RepeatWrapping;
-      tex.wrapT = THREE.RepeatWrapping;
-      tex.encoding = THREE.sRGBEncoding;
-      tex.image = img;
-      tex.needsUpdate = true;
-      console.log(tex)
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bullet.png`, (tex) => {
       const material = new THREE.MeshPhysicalMaterial({map:tex})
       return material;
-    })();
+    })
   })();
 
   const bulletMat = bulletMateial;
