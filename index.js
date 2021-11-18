@@ -98,10 +98,9 @@ export default () => {
     
       tex.image = img;
       tex.needsUpdate = true;
+      const material = new THREE.MeshPhysicalMaterial({map:tex})
+      return material;
     })();
-
-    const material = new THREE.MeshPhysicalMaterial({map:tex})
-    return material;
   })();
 
   const bulletMat = bulletMateial;
