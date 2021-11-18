@@ -1,1 +1,3 @@
-version
+1. Bullethole graphic
+2. Pooling by instance mesh
+3. Fix Z-fighting

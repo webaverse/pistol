@@ -167,7 +167,7 @@ export default () => {
             const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bullet.png`, (tex) => {
-              const material = new THREE.MeshPhysicalMaterial({map:tex})
+              const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex});
               const plane = new THREE.Mesh( planeGeo, material);
               plane.position.fromArray(result.point);
               plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
