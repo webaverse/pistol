@@ -178,6 +178,7 @@ export default () => {
             const normal = new THREE.Vector3().fromArray(result.normal);
             const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
             const plane = new THREE.Mesh( planeGeo, bulletMat);
+            debugger;
             plane.position.fromArray(result.point);
             plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
               plane.position,
