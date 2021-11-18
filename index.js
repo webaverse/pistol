@@ -169,11 +169,14 @@ export default () => {
             const plane = new THREE.Mesh( planeGeo, mat );
 
             plane.position.fromArray(result.point);
-            explosionApp.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
-              explosionApp.position,
-              explosionApp.position.clone().sub(normal),
+            plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
+              plane.position,
+              plane.position.clone().sub(normal),
               upVector
             ))
+            
+            debugger;
+            console.log(plane)
 
             explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
