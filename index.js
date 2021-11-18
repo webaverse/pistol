@@ -80,9 +80,7 @@ export default () => {
 
     
   const bulletMateial = (() => {
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bullet.png`, (tex) => {
-      const material = new THREE.MeshPhysicalMaterial({map:tex})
+
       return material;
     })
   })();
@@ -177,18 +175,22 @@ export default () => {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
             const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
-            const plane = new THREE.Mesh( planeGeo, bulletMat);
-            debugger;
-            plane.position.fromArray(result.point);
-            plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
-              plane.position,
-              plane.position.clone().sub(normal),
-              upVector
-            ))
-            
-            scene.add(plane);
-            console.log(plane, "v0")
-            plane.updateMatrix();
+            const textureLoader = new THREE.TextureLoader();
+            textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bullet.png`, (tex) => {
+              const material = new THREE.MeshPhysicalMaterial({map:tex})
+              const plane = new THREE.Mesh( planeGeo, material);
+              plane.position.fromArray(result.point);
+              plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
+                plane.position,
+                plane.position.clone().sub(normal),
+                upVector
+              ))
+              
+              scene.add(plane);
+              console.log(material, "v0")
+              plane.updateMatrix();
+
+            })
 
             explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
