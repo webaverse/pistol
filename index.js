@@ -175,7 +175,7 @@ export default () => {
                 plane.position.clone().sub(normal),
                 upVector
               ))
-              
+              debugger;
               scene.add(plane);
               console.log(material, "v0")
               plane.updateMatrix();
