@@ -167,7 +167,7 @@ export default () => {
             const normal = new THREE.Vector3().fromArray(result.normal);
             const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
             const mat = new THREE.MeshPhysicalMaterial({color: 0x000000, map: bulletHoleTexture});
-            const plane = new THREE.Mesh( planeGeo, mat );
+            const plane = new THREE.Mesh( planeGeo, bulletMateial);
             plane.position.fromArray(result.point);
             plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
               plane.position,
@@ -246,6 +246,31 @@ export default () => {
       gunApp.use();
     }
   });
+
+  const bulletMateial = (() => {
+    const u = `${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bullet.png`;
+    (async () => {
+      const img = await new Promise((accept, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          accept(img);
+        };
+        img.onerror = reject;
+        img.crossOrigin = 'Anonymous';
+        img.src = u;
+      });
+
+      const tex = new THREE.Texture();
+      tex.wrapS = THREE.RepeatWrapping;
+      tex.wrapT = THREE.RepeatWrapping;
+    
+      tex.image = img;
+      tex.needsUpdate = true;
+    })();
+
+    const material = new THREE.MeshPhysicalMaterial({map:tex})
+    return material;
+  })();
   
   useFrame(({timestamp}) => {
     if (!wearing) {
