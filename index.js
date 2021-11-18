@@ -175,6 +175,7 @@ export default () => {
               upVector
             ))
             
+            plane.parent = explosionApp.parent;
             debugger;
             console.log(plane)
 
