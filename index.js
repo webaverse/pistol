@@ -162,8 +162,20 @@ export default () => {
         {
           const result = physics.raycast(gunApp.position, gunApp.quaternion.clone().multiply(z180Quaternion));
           if (result) {
-            explosionApp.position.fromArray(result.point);
+            // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
+            const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
+            const mat = new THREE.MeshPhysicalMaterial({color: 0x000000});
+            const plane = new THREE.Mesh( planeGeo, mat );
+
+            plane.position.fromArray(result.point);
+            explosionApp.quaternion.setFromRotationMatrix( new THREE.Matrix4.lookAt(
+              explosionApp.position,
+              explosionApp.position.clone().sub(normal),
+              upVector
+            ))
+
+            explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
               new THREE.Matrix4().lookAt(
                 explosionApp.position,
