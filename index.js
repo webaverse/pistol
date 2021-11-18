@@ -77,16 +77,6 @@ export default () => {
       // metaversefile.addApp(explosionApp);
       
     }
-
-    
-  const bulletMateial = (() => {
-
-      return material;
-    })
-  })();
-
-  const bulletMat = bulletMateial;
-
     
     {
       let u2 = `${baseUrl}military.glb`;
