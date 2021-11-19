@@ -174,7 +174,7 @@ export default () => {
               const plane = new THREE.Mesh( planeGeo, material);
               const newPointVec = new THREE.Vector3().fromArray(result.point);
               const modiPoint = newPointVec.add(oppositeVec);
-              plane.position.copy(modiPoint.clone().multiply(upVector));
+              plane.position.copy(modiPoint);
               plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
                 plane.position,
                 plane.position.clone().sub(normal),
