@@ -164,7 +164,7 @@ export default () => {
           const result = physics.raycast(gunApp.position, gunApp.quaternion.clone().multiply(z180Quaternion));
           if (result) {
             // PUT DECAL CODE HERE
-            const raisedNormal = [result.normal[0],result.normal[1] + 0.2, result.normal[2]]
+            const raisedNormal = [result.normal[0],result.normal[1] * 1.5, result.normal[2]]
             // const oppositeVec = new THREE.Vector3().reflect(new Vector3().fromArray(raisedNormal));
             const oppositeVec = raisedNormal;
             const normal = new THREE.Vector3().fromArray(result.normal);
