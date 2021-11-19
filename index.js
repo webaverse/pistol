@@ -164,7 +164,9 @@ export default () => {
           const result = physics.raycast(gunApp.position, gunApp.quaternion.clone().multiply(z180Quaternion));
           if (result) {
             // PUT DECAL CODE HERE
-            const oppositeVec = new THREE.Vector3().reflect(new Vector3().fromArray(result.normal));
+            const raisedNormal = [result.normal[0],result.normal[1] + 0.2, result.normal[2]]
+            // const oppositeVec = new THREE.Vector3().reflect(new Vector3().fromArray(raisedNormal));
+            const oppositeVec = raisedNormal;
             const normal = new THREE.Vector3().fromArray(result.normal);
             const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
 
@@ -173,7 +175,7 @@ export default () => {
               const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: false});
               const plane = new THREE.Mesh( planeGeo, material);
               const newPointVec = new THREE.Vector3().fromArray(result.point);
-              const modiPoint = newPointVec.add(oppositeVec.multiplyScalar(1.6));
+              const modiPoint = newPointVec.add(oppositeVec);
               plane.position.copy(modiPoint);
               plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
                 plane.position,
