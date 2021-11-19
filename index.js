@@ -170,7 +170,7 @@ export default () => {
 
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
-              const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true});
+              const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: false});
               const plane = new THREE.Mesh( planeGeo, material);
               const newPointVec = new THREE.Vector3().fromArray(result.point);
               const modiPoint = newPointVec.add(oppositeVec);
