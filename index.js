@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import metaversefile from 'metaversefile';
+import { Vector3 } from 'three';
 const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysics, useScene, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup} = metaversefile;
 
 const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
@@ -163,10 +164,10 @@ export default () => {
           const result = physics.raycast(gunApp.position, gunApp.quaternion.clone().multiply(z180Quaternion));
           if (result) {
             // PUT DECAL CODE HERE
-            const oppositeVec = new THREE.Vector3().reflect(result.normal)
+            const oppositeVec = new THREE.Vector3().reflect(new Vector3().fromArray(result.normal));
             const normal = new THREE.Vector3().fromArray(result.normal);
-            const newNormalVec = normal.add(oppositeVec);
             const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
+
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
               const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true});
@@ -176,15 +177,15 @@ export default () => {
               plane.position.copy(modiPoint);
               plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
                 plane.position,
-                plane.position.clone().sub(newNormalVec),
+                plane.position.clone().sub(normal),
                 upVector
-              ))
-              debugger;
+              ));
+
               scene.add(plane);
               console.log(material, "v0")
               plane.updateMatrix();
 
-            })
+            });
 
             explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
