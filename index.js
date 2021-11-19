@@ -163,15 +163,16 @@ export default () => {
           const result = physics.raycast(gunApp.position, gunApp.quaternion.clone().multiply(z180Quaternion));
           if (result) {
             // PUT DECAL CODE HERE
+            const oppositeVec = new THREE.Vector3().reflect(result.normal)
             const normal = new THREE.Vector3().fromArray(result.normal);
-            const newNormalVec = normal.add(upVector);
+            const newNormalVec = normal.add(oppositeVec);
             const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
               const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true});
               const plane = new THREE.Mesh( planeGeo, material);
               const newPointVec = new THREE.Vector3().fromArray(result.point);
-              const modiPoint = newPointVec.add(upVector);
+              const modiPoint = newPointVec.add(oppositeVec);
               plane.position.copy(modiPoint);
               plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
                 plane.position,
