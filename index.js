@@ -209,7 +209,7 @@ export default () => {
               for (let i = 0; i < ptCout; i++)
                 {
                     //
-                    let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+                    let p = new THREE.Vector3(positions[i * 3], positions[i * 3 ], positions[i * 3 ]);
 
                     
 
