@@ -198,7 +198,7 @@ export default () => {
             planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
 
             let positionNumComponents = 3;
-            let positions = planeGeo.attributes["position"].array;
+            let positions = planeGeo.attributes.position;
             console.log(positions)
             let ptCout = positions.length;
             let planeNewVertices = new Float32Array(positions.length);
@@ -247,6 +247,7 @@ export default () => {
                     }
                 }
                 planeGeo.attributes.position.needsUpdate = true;
+                planeGeo.attributes.position.usage = THREE.DynamicDrawUsage;
                 planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
                 planeGeo.computeVertexNormals();
                 plane.updateMatrixWorld();
