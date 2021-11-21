@@ -166,11 +166,12 @@ export default () => {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 4, 4)
-            
+            let plane = new THREE.Mesh();
+
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
               const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: false});
-              let plane = new THREE.Mesh( planeGeo, material);
+              plane = new THREE.Mesh( planeGeo, material);
               const newPointVec = new THREE.Vector3().fromArray(result.point);
               const modiPoint = newPointVec.add(new Vector3(0, (normal.y / 20 ),0));
               plane.position.copy(modiPoint);
