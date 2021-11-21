@@ -182,7 +182,6 @@ export default () => {
               ));
 
               scene.add(plane);
-              console.log(material, "v0")
               plane.updateMatrix();
 
             });
@@ -211,6 +210,7 @@ export default () => {
                     //
                     let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
 
+                    console.log(p)
                     
 
                     // const lineMat = new THREE.LineBasicMaterial({
@@ -227,10 +227,10 @@ export default () => {
                     // scene.add( line );
 
 
-                    console.log(p);
 
                     const vertexRaycast = physics.raycast(p, plane.quaternion.clone());
 
+                    //TODO convert point to floatarray?
                     if(vertexRaycast) {
                       planeNewVertices.set(vertexRaycast.point, i)
                       console.log(vertexRaycast);
@@ -238,7 +238,7 @@ export default () => {
                 }
 
                 planeGeo.attributes.position.needsUpdate = true;
-                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( new Float32Array(planeNewVertices), 3 ) ); 
+                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, 3 ) ); 
                 plane.updateMatrixWorld();
 
             }
