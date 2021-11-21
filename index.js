@@ -198,7 +198,7 @@ export default () => {
             planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
 
             let positionNumComponents = 3;
-            let positions = planeGeo.attributes.position;
+            let positions = planeGeo.attributes["position"].array;
             console.log(positions)
             let ptCout = positions.length;
             let planeNewVertices = new Float32Array(positions.length);
