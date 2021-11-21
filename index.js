@@ -198,15 +198,19 @@ export default () => {
             ] );
             planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
 
-            const planeNewVertices = [];
+            let positions = planeGeo.attributes["position"].array;
+            let ptCout = positions.length;
+            let positionNumComponents = 3;
+            let planeNewVertices = new Float32Array(positions.length * positionNumComponents);
 
             if (planeGeo instanceof THREE.BufferGeometry)
             {
-              let positions = planeGeo.attributes["position"].array;
-              let ptCout = positions.length / 3;
+              
               for (let i = 0; i < ptCout; i++)
                 {
                     let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+
+                    
 
                     // const lineMat = new THREE.LineBasicMaterial({
                     //   color: 0x0000ff
@@ -222,13 +226,12 @@ export default () => {
                     // scene.add( line );
 
 
-
                     console.log(p);
 
                     const vertexRaycast = physics.raycast(p, gunApp.quaternion.clone().multiply(z180Quaternion));
 
                     if(vertexRaycast) {
-                      planeNewVertices.push(vertexRaycast.point)
+                      planeNewVertices.set(vertexRaycast.point, i)
                       console.log(vertexRaycast);
                     }
                 }
