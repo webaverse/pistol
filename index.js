@@ -232,11 +232,12 @@ export default () => {
 
                     //TODO convert point to floatarray?
                     if(vertexRaycast) {
-                      planeNewVertices.set(vertexRaycast.point, i)
-                      console.log(vertexRaycast);
+                      if(i < planeNewVertices.length) {
+                        planeNewVertices.set(vertexRaycast.point, i)
+                        console.log(vertexRaycast);
+                      }
                     }
                 }
-
                 planeGeo.attributes.position.needsUpdate = true;
                 planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
                 plane.updateMatrixWorld();
