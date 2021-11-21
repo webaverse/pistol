@@ -165,8 +165,8 @@ export default () => {
           if (result) {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
-            const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
-            const vertices = new Float32Array( [
+            const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 4, 4)
+            /*const vertices = new Float32Array( [
               -1.0, -1.0,  1.0,
                1.0, -1.0,  1.0,
                1.0,  1.0,  1.0,
@@ -175,7 +175,18 @@ export default () => {
               -1.0,  1.0,  1.0,
               -1.0, -1.0,  1.0
             ] );
-            planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+            planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
+
+            if (planeGeo instanceof THREE.BufferGeometry)
+
+            let positions = geo.attributes["position"].array;
+            let ptCout = positions.length / 3;
+            for (let i = 0; i < ptCout; i++)
+            {
+                let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+                console.log(p);
+            }
+
 
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
