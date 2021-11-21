@@ -166,6 +166,26 @@ export default () => {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 4, 4)
+            
+            const textureLoader = new THREE.TextureLoader();
+            textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
+              const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: false});
+              const plane = new THREE.Mesh( planeGeo, material);
+              const newPointVec = new THREE.Vector3().fromArray(result.point);
+              const modiPoint = newPointVec.add(new Vector3(0, (normal.y / 20 ),0));
+              plane.position.copy(modiPoint);
+              plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
+                plane.position,
+                plane.position.clone().sub(normal),
+                upVector
+              ));
+
+              scene.add(plane);
+              console.log(material, "v0")
+              plane.updateMatrix();
+
+            });
+
             /*const vertices = new Float32Array( [
               -1.0, -1.0,  1.0,
                1.0, -1.0,  1.0,
@@ -185,41 +205,30 @@ export default () => {
                 {
                     let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
 
-                    const lineMat = new THREE.LineBasicMaterial({
-                      color: 0x0000ff
-                    });
+                    // const lineMat = new THREE.LineBasicMaterial({
+                    //   color: 0x0000ff
+                    // });
                     
-                    const points = [];
-                    points.push(-p );
-                    points.push( p );
+                    // const points = [];
+                    // points.push( p );
+                    // points.push( p );
                     
-                    const lineGeo = new THREE.BufferGeometry().setFromPoints( points );
+                    // const lineGeo = new THREE.BufferGeometry().setFromPoints( points );
                     
-                    const line = new THREE.Line( lineGeo, lineMat );
-                    scene.add( line );
+                    // const line = new THREE.Line( lineGeo, lineMat );
+                    // scene.add( line );
+
+
 
                     console.log(p);
+
+                    const vertexRaycast = physics.raycast(p, plane.quaternion);
+
+                    if(vertexRaycast) {
+                      console.log(vertexRaycast);
+                    }
                 }
             }
-
-            const textureLoader = new THREE.TextureLoader();
-            textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
-              const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: false});
-              const plane = new THREE.Mesh( planeGeo, material);
-              const newPointVec = new THREE.Vector3().fromArray(result.point);
-              const modiPoint = newPointVec.add(new Vector3(0, (normal.y / 20 ),0));
-              plane.position.copy(modiPoint);
-              plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
-                plane.position,
-                plane.position.clone().sub(normal),
-                upVector
-              ));
-
-              scene.add(plane);
-              console.log(material, "v0")
-              plane.updateMatrix();
-
-            });
 
             explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
