@@ -210,8 +210,6 @@ export default () => {
                     //
                     let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
 
-                    console.log(p)
-                    
 
                     // const lineMat = new THREE.LineBasicMaterial({
                     //   color: 0x0000ff
@@ -234,7 +232,7 @@ export default () => {
                     if(vertexRaycast) {
                       if(i < planeNewVertices.length - 1) {
                         planeNewVertices.set(vertexRaycast.point, i)
-                        console.log(vertexRaycast);
+                        console.log(vertexRaycast, i);
                       }
                     }
                 }
