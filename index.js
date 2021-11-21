@@ -199,6 +199,7 @@ export default () => {
             planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
 
             const planeNewVertices = [];
+
             if (planeGeo instanceof THREE.BufferGeometry)
             {
               let positions = planeGeo.attributes["position"].array;
@@ -232,7 +233,9 @@ export default () => {
                     }
                 }
 
-                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, planeNewVertices.length ) ); 
+                const planeVerts32 = new Float32Array(vertexRaycast);
+
+                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeVerts32, planeVerts32.length ) ); 
                 planeGeo.updateMatrixWorld();
 
             }
