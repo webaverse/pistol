@@ -240,10 +240,9 @@ export default () => {
 
                         catch
                         {
-                          console.log(i)
+                          console.log(convertedVal, i);
                         }
                      
-                        console.log(convertedVal, i);
                       }
                     }
                 }
