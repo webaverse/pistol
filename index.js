@@ -223,7 +223,7 @@ export default () => {
 
                     console.log(p);
 
-                    const vertexRaycast = physics.raycast(p, plane.quaternion);
+                    const vertexRaycast = physics.raycast(p, gunApp.quaternion.clone().multiply(z180Quaternion));
 
                     if(vertexRaycast) {
                       console.log(vertexRaycast);
