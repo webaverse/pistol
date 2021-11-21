@@ -178,15 +178,15 @@ export default () => {
             planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
 
             if (planeGeo instanceof THREE.BufferGeometry)
-
-            let positions = geo.attributes["position"].array;
-            let ptCout = positions.length / 3;
-            for (let i = 0; i < ptCout; i++)
             {
-                let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
-                console.log(p);
+              let positions = planeGeo.attributes["position"].array;
+              let ptCout = positions.length / 3;
+              for (let i = 0; i < ptCout; i++)
+                {
+                    let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+                    console.log(p);
+                }
             }
-
 
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
