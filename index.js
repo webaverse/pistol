@@ -158,7 +158,7 @@ export default () => {
           gunPointLight.startTime = performance.now();
           gunPointLight.endTime = gunPointLight.startTime + muzzleFlashTime;
         }
-        
+
         // bullet hit
         {
           const result = physics.raycast(gunApp.position, gunApp.quaternion.clone().multiply(z180Quaternion));
@@ -166,6 +166,16 @@ export default () => {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
             const planeGeo = new THREE.PlaneGeometry(0.5, 0.5, 4, 4)
+            const vertices = new Float32Array( [
+              -1.0, -1.0,  1.0,
+               1.0, -1.0,  1.0,
+               1.0,  1.0,  1.0,
+            
+               1.0,  1.0,  1.0,
+              -1.0,  1.0,  1.0,
+              -1.0, -1.0,  1.0
+            ] );
+            planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
 
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
