@@ -197,9 +197,9 @@ export default () => {
             ] );
             planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
 
-            let positions = planeGeo.attributes["position"].array;
-            let ptCout = positions.length;
             let positionNumComponents = 3;
+            let positions = planeGeo.attributes["position"].array;
+            let ptCout = positions.length * positionNumComponents;
             let planeNewVertices = new Float32Array(positions.length * positionNumComponents);
 
             if (planeGeo instanceof THREE.BufferGeometry)
@@ -238,7 +238,7 @@ export default () => {
                 }
 
                 planeGeo.attributes.position.needsUpdate = true;
-                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, 3 ) ); 
+                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
                 plane.updateMatrixWorld();
 
             }
