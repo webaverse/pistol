@@ -198,6 +198,7 @@ export default () => {
             ] );
             planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
 
+            const planeNewVertices = new Float32Array([]);
             if (planeGeo instanceof THREE.BufferGeometry)
             {
               let positions = planeGeo.attributes["position"].array;
@@ -226,9 +227,14 @@ export default () => {
                     const vertexRaycast = physics.raycast(p, gunApp.quaternion.clone().multiply(z180Quaternion));
 
                     if(vertexRaycast) {
+                      planeNewVertices.push(vertexRaycast.point)
                       console.log(vertexRaycast);
                     }
                 }
+
+                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, planeNewVertices.length ) ); 
+                planeGeo.updateMatrix();
+
             }
 
             explosionApp.position.fromArray(result.point);
