@@ -248,6 +248,7 @@ export default () => {
                 }
                 planeGeo.attributes.position.needsUpdate = true;
                 planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
+                planeGeo.computeVertexNormals();
                 plane.updateMatrixWorld();
 
             }
