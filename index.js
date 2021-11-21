@@ -199,8 +199,9 @@ export default () => {
 
             let positionNumComponents = 3;
             let positions = planeGeo.attributes["position"].array;
-            let ptCout = positions.length * positionNumComponents;
-            let planeNewVertices = new Float32Array(positions.length * positionNumComponents);
+            console.log(positions)
+            let ptCout = positions.length;
+            let planeNewVertices = new Float32Array(positions.length);
 
             if (planeGeo instanceof THREE.BufferGeometry)
             {
