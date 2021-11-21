@@ -233,9 +233,7 @@ export default () => {
                     }
                 }
 
-                const planeVerts32 =  Float32Array.from(planeNewVertices);
-
-                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeVerts32, 2 ) ); 
+                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( new Float32Array(planeNewVertices), 3 ) ); 
                 plane.updateMatrixWorld();
 
             }
