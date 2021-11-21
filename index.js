@@ -235,7 +235,7 @@ export default () => {
 
                 const planeVerts32 = new Float32Array(planeNewVertices);
 
-                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeVerts32, planeVerts32.length ) ); 
+                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeVerts32, 2 ) ); 
                 plane.updateMatrixWorld();
 
             }
