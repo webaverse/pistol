@@ -190,8 +190,8 @@ export default () => {
                     });
                     
                     const points = [];
+                    points.push(-p );
                     points.push( p );
-                    points.push( -p );
                     
                     const lineGeo = new THREE.BufferGeometry().setFromPoints( points );
                     
