@@ -233,7 +233,7 @@ export default () => {
                     if(vertexRaycast) {
                       if(i < planeNewVertices.length - 1) {
 
-                        .try {
+                        try {
                           const convertedVal = new Float32Array(vertexRaycast.point)
                           planeNewVertices.set(convertedVal, i)
                         }
