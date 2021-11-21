@@ -247,7 +247,6 @@ export default () => {
                     }
                 }
                 planeGeo.attributes.position.needsUpdate = true;
-                planeGeo.attributes.position.usage = THREE.DynamicDrawUsage;
                 planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
                 planeGeo.computeVertexNormals();
                 plane.updateMatrixWorld();
