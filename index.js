@@ -230,9 +230,11 @@ export default () => {
 
                     //TODO convert point to floatarray?
                     if(vertexRaycast) {
-                      if(i < 220) {
-                        planeNewVertices.set(vertexRaycast.point, i)
-                        console.log(vertexRaycast, i);
+                      if(i < planeNewVertices.length - 1) {
+
+                        const convertedVal = new Float32Array(vertexRaycast.point)
+                        planeNewVertices.set(convertedVal, i)
+                        console.log(convertedVal, i);
                       }
                     }
                 }
