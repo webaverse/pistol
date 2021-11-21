@@ -184,6 +184,20 @@ export default () => {
               for (let i = 0; i < ptCout; i++)
                 {
                     let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+
+                    const lineMat = new THREE.LineBasicMaterial({
+                      color: 0x0000ff
+                    });
+                    
+                    const points = [];
+                    points.push( p );
+                    points.push( -p );
+                    
+                    const lineGeo = new THREE.BufferGeometry().setFromPoints( points );
+                    
+                    const line = new THREE.Line( lineGeo, lineMat );
+                    scene.add( line );
+
                     console.log(p);
                 }
             }
