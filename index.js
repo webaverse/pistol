@@ -232,7 +232,7 @@ export default () => {
 
               
 
-                    const pToWorld = debugCube.localToWorld(p);
+                    const pToWorld = plane.localToWorld(p);
                    
                   
 
