@@ -171,7 +171,7 @@ export default () => {
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
               tex.needsUpdate = true;
-              const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: false});
+              const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: false, depthTest: true});
               material.needsUpdate = true;
               plane = new THREE.Mesh( planeGeo, material);
               const newPointVec = new THREE.Vector3().fromArray(result.point);
@@ -252,7 +252,7 @@ export default () => {
                       debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
                       debugCube.updateWorldMatrix();
                       const worldToLoc = plane.worldToLocal(pointVec)
-                      const offset = worldToLoc.add(new Vector3(vertextHitnormal.y / 12, vertextHitnormal.y / 12,vertextHitnormal.y / 12));
+                      const offset = worldToLoc.add(new Vector3(vertextHitnormal.y / 18, vertextHitnormal.y / 18,vertextHitnormal.y / 18));
                       planeGeo.attributes.position.setXYZ( i, offset.x , offset.y, offset.z );
                      
 
