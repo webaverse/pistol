@@ -252,7 +252,7 @@ export default () => {
                       debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
                       debugCube.updateWorldMatrix();
                       const worldToLoc = plane.worldToLocal(pointVec)
-                      const offset = worldToLoc.add(new Vector3(0, vertextHitnormal.y,0));
+                      const offset = worldToLoc.add(new Vector3(vertextHitnormal.y, 0,0));
                       planeGeo.attributes.position.setXYZ( i, offset.x , offset.y, offset.z );
                      
 
@@ -278,12 +278,9 @@ export default () => {
                 planeGeo.attributes.position.needsUpdate = true;
                //  planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
                 planeGeo.computeVertexNormals();
-                plane.material.texture
                 plane.updateMatrixWorld();
                 console.log(planeGeo.attributes.position.array)
 
-
-                
 
             } }, 3000);
            
