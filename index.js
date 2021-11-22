@@ -226,13 +226,14 @@ export default () => {
                     // scene.add( line );
 
 
+                    console.log(p)
 
                     const vertexRaycast = physics.raycast(p, plane.quaternion.clone());
-                    const convertedVal = new Float32Array(vertexRaycast.point)
 
                     //TODO convert point to floatarray?
                     if(vertexRaycast) {
 
+                      const convertedVal = new Float32Array(vertexRaycast.point)
                       const material = new THREE.LineBasicMaterial({
                         color: 0x0000ff
                       });
