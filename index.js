@@ -201,94 +201,98 @@ export default () => {
               ] );
               planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
   
+             
+
+            }).then((resolve)=> {
+
               let positionNumComponents = 3;
               let positions = planeGeo.attributes.position.array;
               console.log(positions)
               let ptCout = positions.length;
               let planeNewVertices = new Float32Array(positions.length);
-
-            }).then((resolve)=> {
               console.log(resolve)
-            } )
+
+               // Why does only half the vertices move?
+            setTimeout(() => {  if (planeGeo instanceof THREE.BufferGeometry)
+              {
+                let vertexHits = 0;
+  
+                for (let i = 0; i < ptCout; i++)
+                  {
+                      //
+                      let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+  
+                      // const lineMat = new THREE.LineBasicMaterial({
+                      //   color: 0x0000ff
+                      // });
+                      
+                      // const points = [];
+                      // points.push( p );
+                      // points.push( p );
+                      
+                      // const lineGeo = new THREE.BufferGeometry().setFromPoints( points );
+                      
+                      // const line = new THREE.Line( lineGeo, lineMat );
+                      // scene.add( line );
+  
+  
+                
+  
+                      const pToWorld = plane.localToWorld(p);
+                    
+  
+                      const vertexRaycast = physics.raycast(pToWorld, plane.quaternion.clone());
+  
+                      //TODO convert point to floatarray?
+                      if(vertexRaycast) {
+  
+                        const vertextHitnormal = new THREE.Vector3().fromArray(vertexRaycast.normal);
+                        vertexHits++;
+                        
+                        const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
+                        const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+                        const debugCube = new THREE.Mesh( debugGeo, debugMat );
+                        scene.add( debugCube );
+                        const convertedVal = new Float32Array(vertexRaycast.point)
+                        const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal));
+                        debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
+                        debugCube.updateWorldMatrix();
+                        const worldToLoc = plane.worldToLocal(pointVec)
+                        const offset = worldToLoc.add(new Vector3(vertextHitnormal.y / 20, vertextHitnormal.y / 20,vertextHitnormal.y / 20));
+                        planeGeo.attributes.position.setXYZ( i, offset.x , offset.y, offset.z );
+                       
+  
+  
+                        console.log(i, pointVec)
+                        if(i < planeNewVertices.length - 1) {
+  
+                          try {
+                            planeNewVertices.set(convertedVal, i)
+                          }
+  
+                          catch
+                          {
+                            console.log("ERROR", i);
+                          }
+                       
+                        }
+                      }
+                  }
+  
+                  console.log(vertexHits)
+                  planeGeo.attributes.position.usage = THREE.DynamicDrawUsage;
+                  planeGeo.attributes.position.needsUpdate = true;
+                 //  planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
+                  planeGeo.computeVertexNormals();
+                  plane.updateMatrixWorld();
+                  console.log(planeGeo.attributes.position.array)
+  
+  
+              } }, 3000);
+             
+            } );
            
 
-            // Why does only half the vertices move?
-            setTimeout(() => {  if (planeGeo instanceof THREE.BufferGeometry)
-            {
-              let vertexHits = 0;
-
-              for (let i = 0; i < ptCout; i++)
-                {
-                    //
-                    let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
-
-                    // const lineMat = new THREE.LineBasicMaterial({
-                    //   color: 0x0000ff
-                    // });
-                    
-                    // const points = [];
-                    // points.push( p );
-                    // points.push( p );
-                    
-                    // const lineGeo = new THREE.BufferGeometry().setFromPoints( points );
-                    
-                    // const line = new THREE.Line( lineGeo, lineMat );
-                    // scene.add( line );
-
-
-              
-
-                    const pToWorld = plane.localToWorld(p);
-                  
-
-                    const vertexRaycast = physics.raycast(pToWorld, plane.quaternion.clone());
-
-                    //TODO convert point to floatarray?
-                    if(vertexRaycast) {
-
-                      const vertextHitnormal = new THREE.Vector3().fromArray(vertexRaycast.normal);
-                      vertexHits++;
-                      
-                      const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
-                      const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-                      const debugCube = new THREE.Mesh( debugGeo, debugMat );
-                      scene.add( debugCube );
-                      const convertedVal = new Float32Array(vertexRaycast.point)
-                      const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal));
-                      debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
-                      debugCube.updateWorldMatrix();
-                      const worldToLoc = plane.worldToLocal(pointVec)
-                      const offset = worldToLoc.add(new Vector3(vertextHitnormal.y / 20, vertextHitnormal.y / 20,vertextHitnormal.y / 20));
-                      planeGeo.attributes.position.setXYZ( i, offset.x , offset.y, offset.z );
-                     
-
-
-                      console.log(i, pointVec)
-                      if(i < planeNewVertices.length - 1) {
-
-                        try {
-                          planeNewVertices.set(convertedVal, i)
-                        }
-
-                        catch
-                        {
-                          console.log("ERROR", i);
-                        }
-                     
-                      }
-                    }
-                }
-
-                console.log(vertexHits)
-                planeGeo.attributes.position.usage = THREE.DynamicDrawUsage;
-                planeGeo.attributes.position.needsUpdate = true;
-               //  planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
-                planeGeo.computeVertexNormals();
-                plane.updateMatrixWorld();
-                console.log(planeGeo.attributes.position.array)
-
-
-            } }, 3000);
            
 
             explosionApp.position.fromArray(result.point);
