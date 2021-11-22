@@ -207,7 +207,7 @@ export default () => {
             let planeNewVertices = new Float32Array(positions.length);
 
             
-            if (planeGeo instanceof THREE.BufferGeometry)
+            setTimeout(() => {  if (planeGeo instanceof THREE.BufferGeometry)
             {
               let vertexHits = 0;
 
@@ -281,7 +281,8 @@ export default () => {
 
                 
 
-            }
+            } }, 3000);
+           
 
             explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
