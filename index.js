@@ -238,7 +238,7 @@ export default () => {
                       });
                       
                       const points = [];
-                      points.push( new THREE.Vector3().fromArray(convertedVal) );
+                      points.push( p );
                       points.push( new THREE.Vector3( 0, 10, 0 ) );
                       points.push( new THREE.Vector3( 10, 0, 0 ) );
                       
