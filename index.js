@@ -240,6 +240,8 @@ export default () => {
                       const points = [];
                       points.push( p );
                       points.push(p.add(5) );
+                      points.push(p.add(15) );
+
                       
                       const geometry = new THREE.BufferGeometry().setFromPoints( points );
                       
