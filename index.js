@@ -214,6 +214,7 @@ export default () => {
                     //
                     let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
 
+                    console.log(ptCout, i)
 
                     // const lineMat = new THREE.LineBasicMaterial({
                     //   color: 0x0000ff
@@ -248,23 +249,8 @@ export default () => {
 
                       const convertedVal = new Float32Array(vertexRaycast.point)
                       const pointVec = new THREE.Vector3().fromArray(convertedVal);
-                      const material = new THREE.LineBasicMaterial({
-                        color: 0x0000ff
-                      });
-                      
-                      const points = [];
-                      points.push( convertedVal );
-
-                      
-                      const geometry = new THREE.BufferGeometry().setFromPoints( points );
-                      
-                      const line = new THREE.Line( geometry, material );
-                      scene.add( line );
-
                       planeGeo.attributes.position.setXYZ( i, p.x, p.y, p.z );
 
-
-                      
                       if(i < planeNewVertices.length - 1) {
 
                         try {
