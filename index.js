@@ -175,7 +175,7 @@ export default () => {
               material.needsUpdate = true;
               plane = new THREE.Mesh( planeGeo, material);
               const newPointVec = new THREE.Vector3().fromArray(result.point);
-              const modiPoint = newPointVec.add(new Vector3(0, normal.y,0));
+              const modiPoint = newPointVec.add(new Vector3(0, normal.y / 2,0));
               plane.position.copy(modiPoint);
               plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
                 plane.position,
@@ -282,7 +282,7 @@ export default () => {
                 console.log(planeGeo.attributes.position.array)
 
 
-            } }, 500);
+            } }, 3000);
            
 
             explosionApp.position.fromArray(result.point);
