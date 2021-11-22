@@ -200,7 +200,7 @@ export default () => {
             let positionNumComponents = 3;
             let positions = planeGeo.attributes.position.array;
             console.log(positions)
-            let ptCout = positions.length * positionNumComponents;
+            let ptCout = positions.length;
             let planeNewVertices = new Float32Array(positions.length);
 
             if (planeGeo instanceof THREE.BufferGeometry)
@@ -251,6 +251,21 @@ export default () => {
                 planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
                 planeGeo.computeVertexNormals();
                 plane.updateMatrixWorld();
+
+
+                const material = new THREE.LineBasicMaterial({
+                  color: 0x0000ff
+                });
+                
+                const points = [];
+                points.push( new THREE.Vector3( - 10, 0, 0 ) );
+                points.push( new THREE.Vector3( 0, 10, 0 ) );
+                points.push( new THREE.Vector3( 10, 0, 0 ) );
+                
+                const geometry = new THREE.BufferGeometry().setFromPoints( points );
+                
+                const line = new THREE.Line( geometry, material );
+                scene.add( line );
 
             }
 
