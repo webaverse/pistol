@@ -230,6 +230,13 @@ export default () => {
 
 
                     console.log(p)
+                    
+                    const debugGeo = new THREE.BoxGeometry( 1, 1, 1 );
+                    const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+                    const debugCube = new THREE.Mesh( debugGeo, debugMat );
+                    scene.add( debugCube );
+                    debugCube.position.set(p.x, p.y, p.z);
+                    debugCube.updateWorldMatrix();
 
                     const vertexRaycast = physics.raycast(p, plane.quaternion.clone());
 
@@ -251,12 +258,6 @@ export default () => {
                       const line = new THREE.Line( geometry, material );
                       scene.add( line );
 
-                      const debugGeo = new THREE.BoxGeometry( 1, 1, 1 );
-                      const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-                      const debugCube = new THREE.Mesh( debugGeo, debugMat );
-                      scene.add( debugCube );
-                      debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
-                      debugCube.updateWorldMatrix();
                       planeGeo.attributes.position.setXYZ( i, pointVec.x, pointVec.y, pointVec.z );
 
 
