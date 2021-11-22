@@ -252,7 +252,7 @@ export default () => {
                       debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
                       debugCube.updateWorldMatrix();
                       const worldToLoc = plane.worldToLocal(pointVec)
-                      const offset = worldToLoc.add(new Vector3(vertextHitnormal.y / 16, vertextHitnormal.y / 16,vertextHitnormal.y / 16));
+                      const offset = worldToLoc.add(new Vector3(vertextHitnormal.y / 12, vertextHitnormal.y / 12,vertextHitnormal.y / 12));
                       planeGeo.attributes.position.setXYZ( i, offset.x , offset.y, offset.z );
                      
 
