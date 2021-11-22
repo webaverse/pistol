@@ -175,7 +175,7 @@ export default () => {
               material.needsUpdate = true;
               plane = new THREE.Mesh( planeGeo, material);
               const newPointVec = new THREE.Vector3().fromArray(result.point);
-              const modiPoint = newPointVec.add(new Vector3(0, normal.y / 2,0));
+              const modiPoint = newPointVec.add(new Vector3(0, normal.y,0));
               plane.position.copy(modiPoint);
               plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
                 plane.position,
@@ -207,7 +207,7 @@ export default () => {
             let planeNewVertices = new Float32Array(positions.length);
 
             // Why does only half the vertices move?
-            setTimeout(() => {  if (planeGeo instanceof THREE.BufferGeometry)
+            
             {
               let vertexHits = 0;
 
@@ -282,7 +282,7 @@ export default () => {
                 console.log(planeGeo.attributes.position.array)
 
 
-            } }, 100);
+            };
            
 
             explosionApp.position.fromArray(result.point);
