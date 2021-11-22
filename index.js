@@ -230,15 +230,11 @@ export default () => {
                     // scene.add( line );
 
 
-                    const debugGeo = new THREE.BoxGeometry( 1, 1, 1 );
-                    const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-                    const debugCube = new THREE.Mesh( debugGeo, debugMat );
-                    scene.add( debugCube );
+              
 
                     const pToWorld = debugCube.localToWorld(p);
                    
-                    debugCube.position.set(pToWorld.x, pToWorld.y, pToWorld.z);
-                    debugCube.updateWorldMatrix();
+                  
 
                     const vertexRaycast = physics.raycast(pToWorld, plane.quaternion.clone());
 
@@ -247,8 +243,15 @@ export default () => {
 
                       vertexHits++;
                       const convertedVal = new Float32Array(vertexRaycast.point)
-                      const pointVec =  plane.worldToLocal(new THREE.Vector3().fromArray(convertedVal));
+                      const pointVec =  plane.localToWorld(new THREE.Vector3().fromArray(convertedVal));
                       planeGeo.attributes.position.setXYZ( i, pointVec.x , pointVec.y, pointVec.z );
+
+                      const debugGeo = new THREE.BoxGeometry( 1, 1, 1 );
+                      const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+                      const debugCube = new THREE.Mesh( debugGeo, debugMat );
+                      debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
+                      debugCube.updateWorldMatrix();
+                      scene.add( debugCube );
                       console.log(i, pointVec)
                       if(i < planeNewVertices.length - 1) {
 
