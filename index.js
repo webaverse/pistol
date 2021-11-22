@@ -216,8 +216,6 @@ export default () => {
                     //
                     let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
 
-                    console.log(ptCout, i)
-
                     // const lineMat = new THREE.LineBasicMaterial({
                     //   color: 0x0000ff
                     // });
@@ -237,8 +235,6 @@ export default () => {
                     const debugCube = new THREE.Mesh( debugGeo, debugMat );
                     scene.add( debugCube );
 
-                    console.log(p)
-                    
                     const pToWorld = debugCube.localToWorld(p);
                    
                     debugCube.position.set(pToWorld.x, pToWorld.y, pToWorld.z);
@@ -253,7 +249,7 @@ export default () => {
                       const convertedVal = new Float32Array(vertexRaycast.point)
                       const pointVec = new THREE.Vector3().fromArray(convertedVal);
                       planeGeo.attributes.position.setXYZ( i, pointVec.x , pointVec.y, pointVec.z );
-
+                      console.log(i, pointVec)
                       if(i < planeNewVertices.length - 1) {
 
                         try {
