@@ -231,14 +231,15 @@ export default () => {
 
                     console.log(p)
                     
+                    const pToWorld = plane.localToWorld(p);
                     const debugGeo = new THREE.BoxGeometry( 1, 1, 1 );
                     const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
                     const debugCube = new THREE.Mesh( debugGeo, debugMat );
                     scene.add( debugCube );
-                    debugCube.position.set(p.x, p.y, p.z);
+                    debugCube.position.set(pToWorld.x, pToWorld.y, pToWorld.z);
                     debugCube.updateWorldMatrix();
 
-                    const vertexRaycast = physics.raycast(p, plane.quaternion.clone());
+                    const vertexRaycast = physics.raycast(pToWorld, plane.quaternion.clone());
 
                     //TODO convert point to floatarray?
                     if(vertexRaycast) {
@@ -258,7 +259,7 @@ export default () => {
                       const line = new THREE.Line( geometry, material );
                       scene.add( line );
 
-                      planeGeo.attributes.position.setXYZ( i, pointVec.x, pointVec.y, pointVec.z );
+                      planeGeo.attributes.position.setXYZ( i, pToWorld.x, pToWorld.y, pToWorld.z );
 
 
                       
