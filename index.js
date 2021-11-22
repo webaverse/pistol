@@ -206,7 +206,7 @@ export default () => {
             let ptCout = positions.length;
             let planeNewVertices = new Float32Array(positions.length);
 
-            
+            // Why does only half the vertices move?
             setTimeout(() => {  if (planeGeo instanceof THREE.BufferGeometry)
             {
               let vertexHits = 0;
@@ -252,6 +252,7 @@ export default () => {
                       vertexHits++;
                       const convertedVal = new Float32Array(vertexRaycast.point)
                       const pointVec = new THREE.Vector3().fromArray(convertedVal);
+                      console.log(pointVec.x.toFixed(2));
                       planeGeo.attributes.position.setXYZ( i, pointVec.x , pointVec.y, pointVec.z );
 
                       if(i < planeNewVertices.length - 1) {
