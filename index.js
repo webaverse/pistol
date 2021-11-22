@@ -205,6 +205,7 @@ export default () => {
             let ptCout = positions.length;
             let planeNewVertices = new Float32Array(positions.length);
 
+            
             if (planeGeo instanceof THREE.BufferGeometry)
             {
               
@@ -236,19 +237,20 @@ export default () => {
                     if(vertexRaycast) {
 
                       const convertedVal = new Float32Array(vertexRaycast.point)
+                      const pointVec = new THREE.Vector3().fromArray(convertedVal);
                       const material = new THREE.LineBasicMaterial({
                         color: 0x0000ff
                       });
                       
                       const points = [];
-                      points.push( p );
+                      points.push( convertedVal );
 
                       
                       const geometry = new THREE.BufferGeometry().setFromPoints( points );
                       
                       const line = new THREE.Line( geometry, material );
                       scene.add( line );
-                      planeGeo.attributes.position.setXYZ( i, p.z, p.x, p.x );
+                      planeGeo.attributes.position.setXYZ( i, pointVec.x, pointVec.y, pointVec.z );
 
                       
                       if(i < planeNewVertices.length - 1) {
