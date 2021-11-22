@@ -250,7 +250,15 @@ export default () => {
                       
                       const line = new THREE.Line( geometry, material );
                       scene.add( line );
-                      planeGeo.attributes.position.setXYZ( i,convertedVal[0], convertedVal[1],convertedVal[2] );
+
+                      const debugGeo = new THREE.BoxGeometry( 1, 1, 1 );
+                      const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+                      const debugCube = new THREE.Mesh( debugGeo, debugMat );
+                      scene.add( debugCube );
+                      debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
+                      debugCube.updateWorldMatrix();
+                      planeGeo.attributes.position.setXYZ( i, pointVec.x, pointVec.y, pointVec.z );
+
 
                       
                       if(i < planeNewVertices.length - 1) {
