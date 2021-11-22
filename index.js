@@ -249,7 +249,7 @@ export default () => {
 
                       const convertedVal = new Float32Array(vertexRaycast.point)
                       const pointVec = new THREE.Vector3().fromArray(convertedVal);
-                      planeGeo.attributes.position.setXYZ( i, 0.25, p.y, p.z );
+                      planeGeo.attributes.position.setXYZ( i, p.x + i, p.y+ i, p.z+ i );
 
                       if(i < planeNewVertices.length - 1) {
 
