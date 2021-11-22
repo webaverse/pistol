@@ -233,7 +233,6 @@ export default () => {
               
 
                     const pToWorld = plane.localToWorld(p);
-                   
                   
 
                     const vertexRaycast = physics.raycast(pToWorld, plane.quaternion.clone());
@@ -241,6 +240,7 @@ export default () => {
                     //TODO convert point to floatarray?
                     if(vertexRaycast) {
 
+                      const vertextHitnormal = new THREE.Vector3().fromArray(vertexRaycast.normal);
                       vertexHits++;
                       
                       const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
@@ -252,7 +252,8 @@ export default () => {
                       debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
                       debugCube.updateWorldMatrix();
                       const worldToLoc = plane.worldToLocal(pointVec)
-                      planeGeo.attributes.position.setXYZ( i, worldToLoc.x , worldToLoc.y, worldToLoc.z );
+                      const offset = worldToLoc.add(new Vector3(0, vertextHitnormal.y,0));
+                      planeGeo.attributes.position.setXYZ( i, offset.x , offset.y, offset.z );
                      
 
 
