@@ -228,7 +228,7 @@ export default () => {
 
 
                     const vertexRaycast = physics.raycast(p, plane.quaternion.clone());
-                    const convertedVal = new Vector3().fromArray(vertexRaycast.point)
+                    const convertedVal = new Float32Array(vertexRaycast.point)
 
                     //TODO convert point to floatarray?
                     if(vertexRaycast) {
@@ -237,16 +237,16 @@ export default () => {
                         color: 0x0000ff
                       });
                       
-                      // const points = [];
-                      // points.push( convertedVal );
-                      // points.push( convertedVal.multiply(2) );
+                      const points = [];
+                      points.push( new THREE.Vector3().fromArray(convertedVal) );
+                      points.push( new THREE.Vector3( 0, 10, 0 ) );
+                      points.push( new THREE.Vector3( 10, 0, 0 ) );
                       
-                      // const geometry = new THREE.BufferGeometry().setFromPoints( points );
+                      const geometry = new THREE.BufferGeometry().setFromPoints( points );
                       
-                      // const line = new THREE.Line( geometry, material );
-                      // scene.add( line );
-
-
+                      const line = new THREE.Line( geometry, material );
+                      scene.add( line );
+                      
                       if(i < planeNewVertices.length - 1) {
 
                         try {
