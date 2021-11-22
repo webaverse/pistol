@@ -170,7 +170,9 @@ export default () => {
 
             const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
+              tex.needsUpdate = true;
               const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: false});
+              material.needsUpdate = true;
               plane = new THREE.Mesh( planeGeo, material);
               const newPointVec = new THREE.Vector3().fromArray(result.point);
               const modiPoint = newPointVec.add(new Vector3(0, (normal.y / 20 ),0));
@@ -234,20 +236,18 @@ export default () => {
                     if(vertexRaycast) {
 
                       const convertedVal = new Float32Array(vertexRaycast.point)
-                      // const material = new THREE.LineBasicMaterial({
-                      //   color: 0x0000ff
-                      // });
+                      const material = new THREE.LineBasicMaterial({
+                        color: 0x0000ff
+                      });
                       
-                      // const points = [];
-                      // points.push( p );
-                      // points.push(p.add(5) );
-                      // points.push(p.add(15) );
+                      const points = [];
+                      points.push( p );
 
                       
-                      // const geometry = new THREE.BufferGeometry().setFromPoints( points );
+                      const geometry = new THREE.BufferGeometry().setFromPoints( points );
                       
-                      // const line = new THREE.Line( geometry, material );
-                      // scene.add( line );
+                      const line = new THREE.Line( geometry, material );
+                      scene.add( line );
                       
                       if(i < planeNewVertices.length - 1) {
 
@@ -267,6 +267,7 @@ export default () => {
                 planeGeo.attributes.position.needsUpdate = true;
                 planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
                 planeGeo.computeVertexNormals();
+                plane.material.texture
                 plane.updateMatrixWorld();
 
 
