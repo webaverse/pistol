@@ -250,7 +250,7 @@ export default () => {
                       
                       const line = new THREE.Line( geometry, material );
                       scene.add( line );
-                      planeGeo.attributes.position.setXYZ( i, pointVec.x, pointVec.y, pointVec.z );
+                      planeGeo.attributes.position.setXYZ( i,convertedVal[0], convertedVal[1],convertedVal[2] );
 
                       
                       if(i < planeNewVertices.length - 1) {
