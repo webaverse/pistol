@@ -175,7 +175,7 @@ export default () => {
               material.needsUpdate = true;
               plane = new THREE.Mesh( planeGeo, material);
               const newPointVec = new THREE.Vector3().fromArray(result.point);
-              const modiPoint = newPointVec.add(new Vector3(0, (normal.y / 20 ),0));
+              const modiPoint = newPointVec.add(new Vector3(0, (normal.y / 15 ),0));
               plane.position.copy(modiPoint);
               plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
                 plane.position,
@@ -248,9 +248,8 @@ export default () => {
                     if(vertexRaycast) {
 
                       const convertedVal = new Float32Array(vertexRaycast.point)
-                      const pointVec = new THREE.Vector3().fromArray(convertedVal);+
-                      console.log(pointVec)
-                      planeGeo.attributes.position.setXYZ( i, pointVec.x, pointVec.y, pointVec.z );
+                      const pointVec = new THREE.Vector3().fromArray(convertedVal);
+                      planeGeo.attributes.position.setXYZ( i, pointVec.x , pointVec.y, pointVec.z );
 
                       if(i < planeNewVertices.length - 1) {
 
