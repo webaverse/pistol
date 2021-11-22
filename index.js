@@ -282,7 +282,7 @@ export default () => {
                 console.log(planeGeo.attributes.position.array)
 
 
-            } }, 1);
+            } }, 500);
            
 
             explosionApp.position.fromArray(result.point);
