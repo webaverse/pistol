@@ -242,16 +242,20 @@ export default () => {
                     if(vertexRaycast) {
 
                       vertexHits++;
-                      const convertedVal = new Float32Array(vertexRaycast.point)
-                      const pointVec =  plane.localToWorld(new THREE.Vector3().fromArray(convertedVal));
-                      planeGeo.attributes.position.setXYZ( i, pointVec.x , pointVec.y, pointVec.z );
-
+                      
                       const debugGeo = new THREE.BoxGeometry( 1, 1, 1 );
                       const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
                       const debugCube = new THREE.Mesh( debugGeo, debugMat );
-                      debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
-                      debugCube.updateWorldMatrix();
                       scene.add( debugCube );
+                      const convertedVal = new Float32Array(vertexRaycast.point)
+                      const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal));
+                      planeGeo.attributes.position.setXYZ( i, pointVec.x , pointVec.y, pointVec.z );
+                      debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
+
+
+                      debugCube.updateWorldMatrix();
+
+
                       console.log(i, pointVec)
                       if(i < planeNewVertices.length - 1) {
 
