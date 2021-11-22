@@ -252,7 +252,6 @@ export default () => {
                       vertexHits++;
                       const convertedVal = new Float32Array(vertexRaycast.point)
                       const pointVec = new THREE.Vector3().fromArray(convertedVal);
-                      console.log(pointVec.x.toFixed(2));
                       planeGeo.attributes.position.setXYZ( i, pointVec.x , pointVec.y, pointVec.z );
 
                       if(i < planeNewVertices.length - 1) {
@@ -277,7 +276,7 @@ export default () => {
                 planeGeo.computeVertexNormals();
                 plane.material.texture
                 plane.updateMatrixWorld();
-                console.log(plane)
+                console.log(planeGeo.attributes.position.array)
 
 
                 
