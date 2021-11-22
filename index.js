@@ -209,7 +209,8 @@ export default () => {
             
             if (planeGeo instanceof THREE.BufferGeometry)
             {
-              
+              let vertexHits = 0;
+
               for (let i = 0; i < ptCout; i++)
                 {
                     //
@@ -248,6 +249,7 @@ export default () => {
                     //TODO convert point to floatarray?
                     if(vertexRaycast) {
 
+                      vertexHits++;
                       const convertedVal = new Float32Array(vertexRaycast.point)
                       const pointVec = new THREE.Vector3().fromArray(convertedVal);
                       planeGeo.attributes.position.setXYZ( i, pointVec.x , pointVec.y, pointVec.z );
@@ -267,6 +269,7 @@ export default () => {
                     }
                 }
 
+                console.log(vertexHits)
                 planeGeo.attributes.position.usage = THREE.DynamicDrawUsage;
                 planeGeo.attributes.position.needsUpdate = true;
                //  planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
