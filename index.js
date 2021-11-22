@@ -247,7 +247,7 @@ export default () => {
 
                       vertexHits++;
                       const convertedVal = new Float32Array(vertexRaycast.point)
-                      const pointVec =  plane.localToWorld(new THREE.Vector3().fromArray(convertedVal));
+                      const pointVec =  plane.worldToLocal(new THREE.Vector3().fromArray(convertedVal));
                       planeGeo.attributes.position.setXYZ( i, pointVec.x , pointVec.y, pointVec.z );
                       console.log(i, pointVec)
                       if(i < planeNewVertices.length - 1) {
