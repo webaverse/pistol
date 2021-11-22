@@ -168,45 +168,51 @@ export default () => {
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 4, 4)
             let plane = new THREE.Mesh();
 
-            const textureLoader = new THREE.TextureLoader();
-            textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
-              tex.needsUpdate = true;
-              const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: false});
-              material.needsUpdate = true;
-              plane = new THREE.Mesh( planeGeo, material);
-              const newPointVec = new THREE.Vector3().fromArray(result.point);
-              const modiPoint = newPointVec.add(new Vector3(0, normal.y / 20,0));
-              plane.position.copy(modiPoint);
-              plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
-                plane.position,
-                plane.position.clone().sub(normal),
-                upVector
-              ));
+            new Promise(()=> {
+              const textureLoader = new THREE.TextureLoader();
+              textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
+                tex.needsUpdate = true;
+                const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: false});
+                material.needsUpdate = true;
+                plane = new THREE.Mesh( planeGeo, material);
+                const newPointVec = new THREE.Vector3().fromArray(result.point);
+                const modiPoint = newPointVec.add(new Vector3(0, normal.y / 20,0));
+                plane.position.copy(modiPoint);
+                plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
+                  plane.position,
+                  plane.position.clone().sub(normal),
+                  upVector
+                ));
+  
+                scene.add(plane);
+                plane.updateMatrix();
+  
+                console.log(planeGeo);
+              }).then((state)=> {
+                console.log
+              });
+  
+              /*const vertices = new Float32Array( [
+                -1.0, -1.0,  1.0,
+                 1.0, -1.0,  1.0,
+                 1.0,  1.0,  1.0,
+              
+                 1.0,  1.0,  1.0,
+                -1.0,  1.0,  1.0,
+                -1.0, -1.0,  1.0
+              ] );
+              planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
+  
+              let positionNumComponents = 3;
+              let positions = planeGeo.attributes.position.array;
+              console.log(positions)
+              let ptCout = positions.length;
+              let planeNewVertices = new Float32Array(positions.length);
 
-              scene.add(plane);
-              plane.updateMatrix();
-
-              console.log(planeGeo);
-            }).then((state)=> {
-              console.log(state)
-            });
-
-            /*const vertices = new Float32Array( [
-              -1.0, -1.0,  1.0,
-               1.0, -1.0,  1.0,
-               1.0,  1.0,  1.0,
-            
-               1.0,  1.0,  1.0,
-              -1.0,  1.0,  1.0,
-              -1.0, -1.0,  1.0
-            ] );
-            planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
-
-            let positionNumComponents = 3;
-            let positions = planeGeo.attributes.position.array;
-            console.log(positions)
-            let ptCout = positions.length;
-            let planeNewVertices = new Float32Array(positions.length);
+            }).then((resolve)=> {
+              console.log(resolve)
+            } )
+           
 
             // Why does only half the vertices move?
             setTimeout(() => {  if (planeGeo instanceof THREE.BufferGeometry)
