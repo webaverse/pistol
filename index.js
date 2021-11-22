@@ -248,6 +248,8 @@ export default () => {
                       
                       const line = new THREE.Line( geometry, material );
                       scene.add( line );
+                      planeGeo.attributes.position.setXYZ( i, p.x, p.y, p.z );
+
                       
                       if(i < planeNewVertices.length - 1) {
 
@@ -263,9 +265,10 @@ export default () => {
                       }
                     }
                 }
+
                 planeGeo.attributes.position.usage = THREE.DynamicDrawUsage;
                 planeGeo.attributes.position.needsUpdate = true;
-                planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
+               //  planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
                 planeGeo.computeVertexNormals();
                 plane.material.texture
                 plane.updateMatrixWorld();
