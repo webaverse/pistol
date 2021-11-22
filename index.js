@@ -229,13 +229,15 @@ export default () => {
                     // scene.add( line );
 
 
-                    console.log(p)
-                    
-                    const pToWorld = plane.localToWorld(p);
                     const debugGeo = new THREE.BoxGeometry( 1, 1, 1 );
                     const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
                     const debugCube = new THREE.Mesh( debugGeo, debugMat );
                     scene.add( debugCube );
+
+                    console.log(p)
+                    
+                    const pToWorld = debugCube.localToWorld(p);
+                   
                     debugCube.position.set(pToWorld.x, pToWorld.y, pToWorld.z);
                     debugCube.updateWorldMatrix();
 
