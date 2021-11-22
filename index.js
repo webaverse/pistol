@@ -248,8 +248,9 @@ export default () => {
                     if(vertexRaycast) {
 
                       const convertedVal = new Float32Array(vertexRaycast.point)
-                      const pointVec = new THREE.Vector3().fromArray(convertedVal);
-                      planeGeo.attributes.position.setXYZ( i, p.x + i, p.y+ i, p.z+ i );
+                      const pointVec = new THREE.Vector3().fromArray(convertedVal);+
+                      console.log(pointVec)
+                      planeGeo.attributes.position.setXYZ( i, pointVec.x, pointVec.y, pointVec.z );
 
                       if(i < planeNewVertices.length - 1) {
 
