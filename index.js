@@ -228,10 +228,25 @@ export default () => {
 
 
                     const vertexRaycast = physics.raycast(p, plane.quaternion.clone());
-                    const convertedVal = new Float32Array(vertexRaycast.point)
+                    const convertedVal = new Vector3().fromArray(vertexRaycast.point)
 
                     //TODO convert point to floatarray?
                     if(vertexRaycast) {
+
+                      const material = new THREE.LineBasicMaterial({
+                        color: 0x0000ff
+                      });
+                      
+                      const points = [];
+                      points.push( convertedVal );
+                      points.push( convertedVal.multiply(2) );
+                      
+                      const geometry = new THREE.BufferGeometry().setFromPoints( points );
+                      
+                      const line = new THREE.Line( geometry, material );
+                      scene.add( line );
+
+
                       if(i < planeNewVertices.length - 1) {
 
                         try {
@@ -253,19 +268,7 @@ export default () => {
                 plane.updateMatrixWorld();
 
 
-                const material = new THREE.LineBasicMaterial({
-                  color: 0x0000ff
-                });
                 
-                const points = [];
-                points.push( new THREE.Vector3( - 10, 0, 0 ) );
-                points.push( new THREE.Vector3( 0, 10, 0 ) );
-                points.push( new THREE.Vector3( 10, 0, 0 ) );
-                
-                const geometry = new THREE.BufferGeometry().setFromPoints( points );
-                
-                const line = new THREE.Line( geometry, material );
-                scene.add( line );
 
             }
 
