@@ -188,8 +188,6 @@ export default () => {
                 plane.updateMatrix();
   
                 console.log(planeGeo);
-              }).then((state)=> {
-                console.log
               });
   
               /*const vertices = new Float32Array( [
