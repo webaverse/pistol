@@ -243,7 +243,7 @@ export default () => {
 
                       vertexHits++;
                       
-                      const debugGeo = new THREE.BoxGeometry( 1, 1, 1 );
+                      const debugGeo = new THREE.BoxGeometry( 0.1, 0.1, 0.1);
                       const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
                       const debugCube = new THREE.Mesh( debugGeo, debugMat );
                       scene.add( debugCube );
