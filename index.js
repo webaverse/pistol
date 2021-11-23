@@ -165,7 +165,7 @@ export default () => {
           if (result) {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
-            const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 4, 4)
+            const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 40, 40)
             let plane = new THREE.Mesh();
 
             new Promise((resolve)=> {
@@ -238,6 +238,8 @@ export default () => {
                       plane.updateMatrixWorld();
                       console.log(planeGeo.attributes.position.array)
               } }, 2000);
+
+              
              
             } );
            
