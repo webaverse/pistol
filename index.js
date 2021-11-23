@@ -189,26 +189,12 @@ export default () => {
                 resolve();
                 console.log(planeGeo);
               });
-  
-              /*const vertices = new Float32Array( [
-                -1.0, -1.0,  1.0,
-                 1.0, -1.0,  1.0,
-                 1.0,  1.0,  1.0,
-              
-                 1.0,  1.0,  1.0,
-                -1.0,  1.0,  1.0,
-                -1.0, -1.0,  1.0
-              ] );
-              planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
-  
              
             }).then((resolve)=> {
 
-              let positionNumComponents = 3;
               let positions = planeGeo.attributes.position.array;
               console.log(positions)
               let ptCout = positions.length;
-              let planeNewVertices = new Float32Array(positions.length);
               console.log(resolve)
 
                // Why does only half the vertices move?
@@ -221,24 +207,7 @@ export default () => {
                       //
                       let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
   
-                      // const lineMat = new THREE.LineBasicMaterial({
-                      //   color: 0x0000ff
-                      // });
-                      
-                      // const points = [];
-                      // points.push( p );
-                      // points.push( p );
-                      
-                      // const lineGeo = new THREE.BufferGeometry().setFromPoints( points );
-                      
-                      // const line = new THREE.Line( lineGeo, lineMat );
-                      // scene.add( line );
-  
-  
-                
-  
                       const pToWorld = plane.localToWorld(p);
-                    
   
                       const vertexRaycast = physics.raycast(pToWorld, plane.quaternion.clone());
   
@@ -259,35 +228,16 @@ export default () => {
                         const worldToLoc = plane.worldToLocal(pointVec)
                         const offset = worldToLoc.add(new Vector3(vertextHitnormal.y / 20, vertextHitnormal.y / 20,vertextHitnormal.y / 20));
                         planeGeo.attributes.position.setXYZ( i, offset.x , offset.y, offset.z );
-                       
-  
-  
-                        console.log(i, pointVec)
-                        if(i < planeNewVertices.length - 1) {
-  
-                          try {
-                            planeNewVertices.set(convertedVal, i)
-                          }
-  
-                          catch
-                          {
-                            console.log("ERROR", i);
-                          }
-                       
-                        }
                       }
                   }
-  
-                  console.log(vertexHits)
-                  planeGeo.attributes.position.usage = THREE.DynamicDrawUsage;
-                  planeGeo.attributes.position.needsUpdate = true;
-                 //  planeGeo.setAttribute( 'position', new THREE.BufferAttribute( planeNewVertices, positionNumComponents ) ); 
-                  planeGeo.computeVertexNormals();
-                  plane.updateMatrixWorld();
-                  console.log(planeGeo.attributes.position.array)
-  
-  
-              } }, 5000);
+      
+                      console.log(vertexHits)
+                      planeGeo.attributes.position.usage = THREE.DynamicDrawUsage;
+                      planeGeo.attributes.position.needsUpdate = true;
+                      planeGeo.computeVertexNormals();
+                      plane.updateMatrixWorld();
+                      console.log(planeGeo.attributes.position.array)
+              } }, 2000);
              
             } );
            
