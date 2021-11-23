@@ -228,7 +228,7 @@ export default () => {
                         const debugCube = new THREE.Mesh( debugGeo, debugMat );
                         scene.add( debugCube );
                         const convertedVal = new Float32Array(vertexRaycast.point)
-                        const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal));
+                        const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal).add(5));
                         debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
                         debugCube.updateWorldMatrix();
                         const worldToLoc = plane.worldToLocal(pointVec)
