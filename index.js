@@ -165,7 +165,7 @@ export default () => {
           if (result) {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
-            const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 40, 40)
+            const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 10, 10)
             let plane = new THREE.Mesh();
 
             new Promise((resolve)=> {
