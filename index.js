@@ -219,7 +219,7 @@ export default () => {
                         
                         const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
                         const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-                        const debugCube = new THREE.Mesh( debugGeo, debugMat );
+                        const debugCube = new THREE.Object3D();
                         scene.add( debugCube );
                         const convertedVal = new Float32Array(vertexRaycast.point)
                         const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal));
@@ -228,6 +228,7 @@ export default () => {
                         const worldToLoc = plane.worldToLocal(pointVec)
                         const offset = worldToLoc.add(new Vector3(vertextHitnormal.x / 20, vertextHitnormal.y / 20,vertextHitnormal.z / 20));
                         planeGeo.attributes.position.setXYZ( i, offset.x , offset.y, offset.z );
+                        
                       }
                   }
       
