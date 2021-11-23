@@ -237,14 +237,8 @@ export default () => {
                       planeGeo.computeVertexNormals();
                       plane.updateMatrixWorld();
                       console.log(planeGeo.attributes.position.array)
-              } }, 100);
-
-              
-             
+              } }, 1);
             } );
-           
-
-           
 
             explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
