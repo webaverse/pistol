@@ -168,7 +168,7 @@ export default () => {
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8)
             let plane = new THREE.Mesh();
 
-           await new Promise(async (resolve, reject)=> {
+            new Promise(async (resolve, reject)=> {
               const textureLoader = new THREE.TextureLoader();
               textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, async (tex) => {
                 tex.needsUpdate = true;
@@ -198,7 +198,7 @@ export default () => {
              
             }).then((resolve)=> {
 
-              console.log("APPLY VERTEX TRANSFORMATION")
+              console.log("APPLY VERTEX")
               let positions = planeGeo.attributes.position.array;
               let ptCout = positions.length;
               console.log(resolve)
