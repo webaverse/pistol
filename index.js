@@ -240,7 +240,8 @@ export default () => {
                       planeGeo.attributes.position.needsUpdate = true;
                       planeGeo.computeVertexNormals();
                       plane.updateMatrixWorld();
-              } }, 2000);
+                      plane.name = "";
+              } }, 1);
             } );
 
             explosionApp.position.fromArray(result.point);
