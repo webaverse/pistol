@@ -168,7 +168,7 @@ export default () => {
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 4, 4)
             let plane = new THREE.Mesh();
 
-            new Promise(()=> {
+            new Promise((resolve)=> {
               const textureLoader = new THREE.TextureLoader();
               textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
                 tex.needsUpdate = true;
@@ -202,7 +202,7 @@ export default () => {
               planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
   
              
-
+              resolve();
             }).then((resolve)=> {
 
               let positionNumComponents = 3;
