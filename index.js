@@ -192,10 +192,6 @@ export default () => {
                   resolve();
 
                 }
-
-                else {
-                  reject();
-                }
                 console.log(planeGeo);
               });
              
