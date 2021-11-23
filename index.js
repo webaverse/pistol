@@ -167,8 +167,9 @@ export default () => {
             const normal = new THREE.Vector3().fromArray(result.normal);
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8)
             let plane = new THREE.Mesh();
+            plane.name = "PlaneTest"
 
-            new Promise((resolve)=> {
+            new Promise((resolve, reject)=> {
               const textureLoader = new THREE.TextureLoader();
               textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
                 tex.needsUpdate = true;
@@ -176,7 +177,7 @@ export default () => {
                 material.needsUpdate = true;
                 plane = new THREE.Mesh( planeGeo, material);
                 const newPointVec = new THREE.Vector3().fromArray(result.point);
-                const modiPoint = newPointVec.add(new Vector3(0, normal.y ,0));
+                const modiPoint = newPointVec.add(new Vector3(0, normal.y /20 ,0));
                 plane.position.copy(modiPoint);
                 plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
                   plane.position,
@@ -186,14 +187,21 @@ export default () => {
   
                 scene.add(plane);
                 plane.updateMatrix();
-                resolve();
+
+                if(scene.getObjectByName('PlaneTest')) {
+                  resolve();
+
+                }
+
+                else {
+                  reject();
+                }
                 console.log(planeGeo);
               });
              
             }).then((resolve)=> {
 
               let positions = planeGeo.attributes.position.array;
-              console.log(positions)
               let ptCout = positions.length;
               console.log(resolve)
 
@@ -236,8 +244,7 @@ export default () => {
                       planeGeo.attributes.position.needsUpdate = true;
                       planeGeo.computeVertexNormals();
                       plane.updateMatrixWorld();
-                      console.log(planeGeo.attributes.position.array)
-              } }, 1);
+              } }, 2000);
             } );
 
             explosionApp.position.fromArray(result.point);
