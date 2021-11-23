@@ -168,9 +168,9 @@ export default () => {
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8)
             let plane = new THREE.Mesh();
 
-            new Promise((resolve, reject)=> {
+           await new Promise(async (resolve, reject)=> {
               const textureLoader = new THREE.TextureLoader();
-              textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, (tex) => {
+              textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, async (tex) => {
                 tex.needsUpdate = true;
                 const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: true, depthTest: true});
                 material.needsUpdate = true;
@@ -188,6 +188,7 @@ export default () => {
                 scene.add(plane);
                 plane.updateMatrix();
 
+                console.log("CREATED PLANE")
                 if(scene.getObjectByName('PlaneTest')) {
                   resolve();
 
@@ -197,6 +198,7 @@ export default () => {
              
             }).then((resolve)=> {
 
+              console.log("APPLY VERTEX TRANSFORMATION")
               let positions = planeGeo.attributes.position.array;
               let ptCout = positions.length;
               console.log(resolve)
@@ -230,7 +232,7 @@ export default () => {
                         debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
                         debugCube.updateWorldMatrix();
                         const worldToLoc = plane.worldToLocal(pointVec)
-                        const offset = worldToLoc.add(new Vector3(vertextHitnormal.x / 6, vertextHitnormal.y / 6,vertextHitnormal.z / 6));
+                        const offset = worldToLoc.add(new Vector3(vertextHitnormal.x / 20, vertextHitnormal.y / 20,vertextHitnormal.z / 20));
                         planeGeo.attributes.position.setXYZ( i, offset.x , offset.y, offset.z );
                       }
                   }
