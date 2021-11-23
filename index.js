@@ -287,7 +287,7 @@ export default () => {
                   console.log(planeGeo.attributes.position.array)
   
   
-              } }, 100);
+              } }, 500);
              
             } );
            
