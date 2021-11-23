@@ -165,7 +165,7 @@ export default () => {
           if (result) {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
-            const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 100, 100)
+            const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8)
             let plane = new THREE.Mesh();
 
             new Promise((resolve)=> {
@@ -217,14 +217,14 @@ export default () => {
                         const vertextHitnormal = new THREE.Vector3().fromArray(vertexRaycast.normal);
                         vertexHits++;
                         
-                        // const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
-                        // const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-                        // const debugCube = new THREE.Mesh( debugGeo, debugMat );
-                        // scene.add( debugCube );
+                        const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
+                        const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+                        const debugCube = new THREE.Mesh( debugGeo, debugMat );
+                        scene.add( debugCube );
                         const convertedVal = new Float32Array(vertexRaycast.point)
-                        const pointVec =  plane.localToWorld(new THREE.Vector3().fromArray(convertedVal));
-                        //debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
-                        //debugCube.updateWorldMatrix();
+                        const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal));
+                        debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
+                        debugCube.updateWorldMatrix();
                         const worldToLoc = plane.worldToLocal(pointVec)
                         const offset = worldToLoc.add(new Vector3(vertextHitnormal.y / 20, vertextHitnormal.y / 20,vertextHitnormal.y / 20));
                         planeGeo.attributes.position.setXYZ( i, offset.x , offset.y, offset.z );
