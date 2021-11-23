@@ -165,7 +165,7 @@ export default () => {
           if (result) {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
-            const planeGeo = new THREE.PlaneBufferGeometry(10, 10, 4, 4)
+            const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 4, 4)
             let plane = new THREE.Mesh();
 
             new Promise((resolve)=> {
@@ -176,7 +176,7 @@ export default () => {
                 material.needsUpdate = true;
                 plane = new THREE.Mesh( planeGeo, material);
                 const newPointVec = new THREE.Vector3().fromArray(result.point);
-                const modiPoint = newPointVec.add(new Vector3(0, normal.y / 20,0));
+                const modiPoint = newPointVec.add(new Vector3(0, normal.y / 14,0));
                 plane.position.copy(modiPoint);
                 plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
                   plane.position,
