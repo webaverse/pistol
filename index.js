@@ -186,7 +186,7 @@ export default () => {
   
                 scene.add(plane);
                 plane.updateMatrix();
-  
+                resolve();
                 console.log(planeGeo);
               });
   
@@ -202,7 +202,6 @@ export default () => {
               planeGeo.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) ); */
   
              
-              resolve();
             }).then((resolve)=> {
 
               let positionNumComponents = 3;
@@ -288,7 +287,7 @@ export default () => {
                   console.log(planeGeo.attributes.position.array)
   
   
-              } }, 1);
+              } }, 500);
              
             } );
            
