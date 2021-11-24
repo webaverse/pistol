@@ -196,7 +196,7 @@ export default () => {
                 console.log(planeGeo);
               });
              
-            }).resolve((resolve)=> {
+            }).then((resolve)=> {
 
               console.log("APPLY VERTEX")
               let positions = planeGeo.attributes.position.array;
