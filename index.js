@@ -196,7 +196,7 @@ export default () => {
                 console.log(planeGeo);
               });
              
-            }).then((resolve)=> {
+            });
 
               console.log("APPLY VERTEX")
               let positions = planeGeo.attributes.position.array;
@@ -244,7 +244,7 @@ export default () => {
                       plane.updateMatrixWorld();
                       plane.name = "";
               } }, 1);
-            } );
+            
 
             explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
