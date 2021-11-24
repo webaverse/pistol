@@ -17,6 +17,11 @@ const fnEmptyArray = () => emptyArray;
 export default () => {
   const app = useApp();
   app.name = 'pistol';
+  
+  const soundManager = useSoundManager();
+
+  let pistolSound = `${baseUrl}shoot.wav`;
+  soundManager.loadSound('pistol',pistolSound);
 
   const physics = usePhysics();
   const scene = useScene();
