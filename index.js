@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import metaversefile from 'metaversefile';
 import { Vector3 } from 'three';
+import { clamp } from 'three/src/math/MathUtils';
 const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysics, useScene, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup} = metaversefile;
 
 const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
@@ -238,8 +239,10 @@ export default () => {
                         console.log("Hit position world: debugCube", debugCube);
                         console.log("Plane world position", plane)
                         console.log("Hit position local: worldToLoc",worldToLoc);
+                        console.log("LOCAL PLANE", plane.worldToLocal(worldToLoc));
+
                         //const offset = worldToLoc.add(new Vector3(vertextHitnormal.x / 20, vertextHitnormal.y / 20,vertextHitnormal.z / 20));
-                        planeGeo.attributes.position.setXYZ( i, worldToLoc.x , worldToLoc.y, worldToLoc.z );
+                        planeGeo.attributes.position.setXYZ( i, clamp(worldToLoc.x, 0.0, 1) , clamp(worldToLoc.y, 0.0, 1), clamp(worldToLoc.z, 0.0, 1) );
                       }
                   }
       
