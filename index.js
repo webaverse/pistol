@@ -190,8 +190,13 @@ export default () => {
 
                 console.log("CREATED PLANE")
                 if(scene.getObjectByName('PlaneTest')) {
-                  //resolve();
+                  resolve();
 
+                }
+
+                else {
+                  setTimeout(()=> {resolve()
+                  }, 100);
                 }
                 console.log(planeGeo);
               });
