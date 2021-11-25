@@ -241,7 +241,7 @@ export default () => {
                         //console.log("Hit position local: worldToLoc",worldToLoc);
 
 
-                        const clampedPos = new Vector3(clamp(worldToLoc.x, -3, 3), clamp(worldToLoc.y, -3, 3), clamp(worldToLoc.z, -3, 3));
+                        const clampedPos = new Vector3(clamp(worldToLoc.x, -1, 3), clamp(worldToLoc.y, -1, 3), clamp(worldToLoc.z, -1, 3));
                         console.log(clampedPos)
                         //const offset = worldToLoc.add(new Vector3(vertextHitnormal.x / 20, vertextHitnormal.y / 20,vertextHitnormal.z / 20));
                         planeGeo.attributes.position.setXYZ( i, clampedPos.x, clampedPos.y, clampedPos.z );
