@@ -168,7 +168,7 @@ export default () => {
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8)
             let plane = new THREE.Mesh();
 
-            new Promise(async (resolve, reject)=> {
+            //new Promise(async (resolve, reject)=> {
               const textureLoader = new THREE.TextureLoader();
            await textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, async (tex) => {
                 tex.needsUpdate = true;
@@ -190,19 +190,22 @@ export default () => {
 
                 console.log("CREATED PLANE")
                 if(scene.getObjectByName('PlaneTest')) {
-                  resolve();
+                  //resolve();
 
                 }
                 console.log(planeGeo);
               });
              
-            });
+           // }).then((resolve)=> {
 
               console.log("APPLY VERTEX")
               let positions = planeGeo.attributes.position.array;
               let ptCout = positions.length;
+              console.log(resolve)
+
                // Why does only half the vertices move?
-            setTimeout(() => {  if (planeGeo instanceof THREE.BufferGeometry)
+            setTimeout(() => {  
+              if (planeGeo instanceof THREE.BufferGeometry)
               {
                 let vertexHits = 0;
   
@@ -241,8 +244,8 @@ export default () => {
                       planeGeo.computeVertexNormals();
                       plane.updateMatrixWorld();
                       plane.name = "";
-              } }, 1);
-            
+              } }, 100);
+            // } );
 
             explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
