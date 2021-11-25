@@ -201,7 +201,7 @@ export default () => {
               console.log("APPLY VERTEX")
               let positions = planeGeo.attributes.position.array;
               let ptCout = positions.length;
-              console.log(resolve)
+             // console.log(resolve)
 
                // Why does only half the vertices move?
             setTimeout(() => {  
