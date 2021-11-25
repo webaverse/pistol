@@ -138,7 +138,7 @@ export default () => {
       scene.add(gunApp);
       // metaversefile.addApp(gunApp);
       
-      gunApp.addEventListener('use', async (e) => {
+      gunApp.addEventListener('use', e => {
         // muzzle flash
         {
           explosionApp.position.copy(gunApp.position)
@@ -168,7 +168,7 @@ export default () => {
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8)
             let plane = new THREE.Mesh();
 
-          await new Promise(async (resolve, reject)=> {
+            //new Promise(async (resolve, reject)=> {
               const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, async (tex) => {
                 tex.needsUpdate = true;
@@ -190,68 +190,64 @@ export default () => {
 
                 console.log("CREATED PLANE")
                 if(scene.getObjectByName('PlaneTest')) {
-                  resolve();
+                  //resolve();
+
                 }
-                else {
-                  setTimeout(()=> {resolve()
-                  }, 100);
-                }
+                console.log(planeGeo);
               });
-           }).then((resolve)=> {
              
-            console.log("APPLY VERTEX")
-            let positions = planeGeo.attributes.position.array;
-            let ptCout = positions.length;
-           // console.log(resolve)
+           // }).then((resolve)=> {
 
-             // Why does only half the vertices move?
-         // setTimeout(() => {  
-            if (planeGeo instanceof THREE.BufferGeometry)
-            {
-              let vertexHits = 0;
+              console.log("APPLY VERTEX")
+              let positions = planeGeo.attributes.position.array;
+              let ptCout = positions.length;
+             // console.log(resolve)
 
-              for (let i = 0; i < ptCout; i++)
-                {
-                    //
-                    let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
-
-                    const pToWorld = plane.localToWorld(p);
-
-                    const vertexRaycast = physics.raycast(pToWorld, plane.quaternion.clone());
-
-                    //TODO convert point to floatarray?
-                    if(vertexRaycast) {
-
-                      const vertextHitnormal = new THREE.Vector3().fromArray(vertexRaycast.normal);
-                      vertexHits++;
-                      
-                      const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
-                      const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-                      const debugCube = new THREE.Mesh( debugGeo, debugMat );
-                      scene.add( debugCube );
-                      const convertedVal = new Float32Array(vertexRaycast.point)
-                      const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal).add(
-                        new Vector3(0, vertextHitnormal.y / 14,0 )
-                      ));
-                      debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
-                      debugCube.updateWorldMatrix();
-                      const worldToLoc = plane.worldToLocal(pointVec)
-                      //const offset = worldToLoc.add(new Vector3(vertextHitnormal.x / 20, vertextHitnormal.y / 20,vertextHitnormal.z / 20));
-                      planeGeo.attributes.position.setXYZ( i, worldToLoc.x , worldToLoc.y, worldToLoc.z );
-                    }
-                }
-    
-                    console.log(vertexHits)
-                    planeGeo.attributes.position.usage = THREE.DynamicDrawUsage;
-                    planeGeo.attributes.position.needsUpdate = true;
-                    planeGeo.computeVertexNormals();
-                    plane.updateMatrixWorld();
-                    plane.name = "";
-            } //}, 100);
-          // } );
-
-           })
-
+               // Why does only half the vertices move?
+            setTimeout(() => {  
+              if (planeGeo instanceof THREE.BufferGeometry)
+              {
+                let vertexHits = 0;
+  
+                for (let i = 0; i < ptCout; i++)
+                  {
+                      //
+                      let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+  
+                      const pToWorld = plane.localToWorld(p);
+  
+                      const vertexRaycast = physics.raycast(pToWorld, plane.quaternion.clone());
+  
+                      //TODO convert point to floatarray?
+                      if(vertexRaycast) {
+  
+                        const vertextHitnormal = new THREE.Vector3().fromArray(vertexRaycast.normal);
+                        vertexHits++;
+                        
+                        const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
+                        const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+                        const debugCube = new THREE.Mesh( debugGeo, debugMat );
+                        scene.add( debugCube );
+                        const convertedVal = new Float32Array(vertexRaycast.point)
+                        const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal).add(
+                          new Vector3(0, vertextHitnormal.y / 14,0 )
+                        ));
+                        debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
+                        debugCube.updateWorldMatrix();
+                        const worldToLoc = plane.worldToLocal(pointVec)
+                        //const offset = worldToLoc.add(new Vector3(vertextHitnormal.x / 20, vertextHitnormal.y / 20,vertextHitnormal.z / 20));
+                        planeGeo.attributes.position.setXYZ( i, worldToLoc.x , worldToLoc.y, worldToLoc.z );
+                      }
+                  }
+      
+                      console.log(vertexHits)
+                      planeGeo.attributes.position.usage = THREE.DynamicDrawUsage;
+                      planeGeo.attributes.position.needsUpdate = true;
+                      planeGeo.computeVertexNormals();
+                      plane.updateMatrixWorld();
+                      plane.name = "";
+              } }, 100);
+            // } );
 
             explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
