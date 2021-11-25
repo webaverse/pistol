@@ -191,16 +191,12 @@ export default () => {
                 console.log("CREATED PLANE")
                 if(scene.getObjectByName('PlaneTest')) {
                   resolve();
-
                 }
-
                 else {
                   setTimeout(()=> {resolve()
                   }, 100);
                 }
-                console.log(planeGeo);
               });
-             
            })
 
               console.log("APPLY VERTEX")
@@ -209,7 +205,7 @@ export default () => {
              // console.log(resolve)
 
                // Why does only half the vertices move?
-            setTimeout(() => {  
+           // setTimeout(() => {  
               if (planeGeo instanceof THREE.BufferGeometry)
               {
                 let vertexHits = 0;
@@ -251,7 +247,7 @@ export default () => {
                       planeGeo.computeVertexNormals();
                       plane.updateMatrixWorld();
                       plane.name = "";
-              } }, 100);
+              } //}, 100);
             // } );
 
             explosionApp.position.fromArray(result.point);
