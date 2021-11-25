@@ -138,7 +138,7 @@ export default () => {
       scene.add(gunApp);
       // metaversefile.addApp(gunApp);
       
-      gunApp.addEventListener('use', e => {
+      gunApp.addEventListener('use', async (e) => {
         // muzzle flash
         {
           explosionApp.position.copy(gunApp.position)
@@ -168,7 +168,7 @@ export default () => {
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8)
             let plane = new THREE.Mesh();
 
-            //new Promise(async (resolve, reject)=> {
+          await new Promise(async (resolve, reject)=> {
               const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, async (tex) => {
                 tex.needsUpdate = true;
@@ -196,7 +196,7 @@ export default () => {
                 console.log(planeGeo);
               });
              
-           // }).then((resolve)=> {
+           })
 
               console.log("APPLY VERTEX")
               let positions = planeGeo.attributes.position.array;
