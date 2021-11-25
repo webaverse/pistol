@@ -230,7 +230,7 @@ export default () => {
                         scene.add( debugCube );
                         const convertedVal = new Float32Array(vertexRaycast.point)
                         const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal).add(
-                          new Vector3(0, vertextHitnormal.y / 2,0 )
+                          new Vector3(0, vertextHitnormal.y / 20,0 )
                         ));
                         debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
                         debugCube.updateWorldMatrix();
