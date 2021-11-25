@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import metaversefile from 'metaversefile';
 import { Vector3 } from 'three';
+import { clamp } from 'three/src/math/MathUtils';
 const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysics, useScene, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup} = metaversefile;
 
 const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
@@ -188,17 +189,14 @@ export default () => {
                 scene.add(plane);
                 plane.updateMatrix();
 
-                console.log("CREATED PLANE")
                 if(scene.getObjectByName('PlaneTest')) {
                   //resolve();
 
                 }
-                console.log(planeGeo);
               });
              
            // }).then((resolve)=> {
 
-              console.log("APPLY VERTEX")
               let positions = planeGeo.attributes.position.array;
               let ptCout = positions.length;
              // console.log(resolve)
@@ -227,20 +225,24 @@ export default () => {
                         const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
                         const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
                         const debugCube = new THREE.Mesh( debugGeo, debugMat );
+                        
                         scene.add( debugCube );
-                        const convertedVal = new Float32Array(vertexRaycast.point)
-                        const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal).add(
+                        const vertexHitPoint = new Float32Array(vertexRaycast.point)
+                        const clampedPostion = new THREE.Vector3().fromArray(vertexHitPoint);
+                        const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(clampedPostion).add(
                           new Vector3(0, vertextHitnormal.y / 14,0 )
                         ));
                         debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
                         debugCube.updateWorldMatrix();
                         const worldToLoc = plane.worldToLocal(pointVec)
+                        console.log("Hit position world: debugCube", debugCube.getWorldPosition());
+                        console.log("Plane world position", plane.getWorldPosition())
+                        console.log("Hit position local: worldToLoc",worldToLoc);
                         //const offset = worldToLoc.add(new Vector3(vertextHitnormal.x / 20, vertextHitnormal.y / 20,vertextHitnormal.z / 20));
                         planeGeo.attributes.position.setXYZ( i, worldToLoc.x , worldToLoc.y, worldToLoc.z );
                       }
                   }
       
-                      console.log(vertexHits)
                       planeGeo.attributes.position.usage = THREE.DynamicDrawUsage;
                       planeGeo.attributes.position.needsUpdate = true;
                       planeGeo.computeVertexNormals();
