@@ -230,13 +230,13 @@ export default () => {
                         scene.add( debugCube );
                         const convertedVal = new Float32Array(vertexRaycast.point)
                         const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal).add(
-                          new Vector3(0, vertextHitnormal.y / 20,0 )
+                          new Vector3(0, vertextHitnormal.y / 14,0 )
                         ));
                         debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
                         debugCube.updateWorldMatrix();
                         const worldToLoc = plane.worldToLocal(pointVec)
-                        const offset = worldToLoc.add(new Vector3(vertextHitnormal.x / 20, vertextHitnormal.y / 20,vertextHitnormal.z / 20));
-                        planeGeo.attributes.position.setXYZ( i, offset.x , offset.y, offset.z );
+                        //const offset = worldToLoc.add(new Vector3(vertextHitnormal.x / 20, vertextHitnormal.y / 20,vertextHitnormal.z / 20));
+                        planeGeo.attributes.position.setXYZ( i, worldToLoc.x , worldToLoc.y, worldToLoc.z );
                       }
                   }
       
