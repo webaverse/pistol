@@ -236,9 +236,9 @@ export default () => {
                         debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
                         debugCube.updateWorldMatrix();
                         const worldToLoc = plane.worldToLocal(pointVec)
-                        console.log("Hit position world: debugCube", debugCube);
-                        console.log("Plane world position", plane)
-                        console.log("Hit position local: worldToLoc",worldToLoc);
+                        //console.log("Hit position world: debugCube", debugCube);
+                        //console.log("Plane world position", plane)
+                        //console.log("Hit position local: worldToLoc",worldToLoc);
 
 
                         const clampedPos = new Vector3(clamp(worldToLoc.x, -3, 3), clamp(worldToLoc.y, -3, 3), clamp(worldToLoc.z, -3, 3));
