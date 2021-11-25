@@ -242,7 +242,7 @@ export default () => {
 
                         const clampedPos = new Vector3(clamp(worldToLoc.x, 0.0, 1), clamp(worldToLoc.y, 0.0, 1), clamp(worldToLoc.z, 0.0, 1));
                         //const offset = worldToLoc.add(new Vector3(vertextHitnormal.x / 20, vertextHitnormal.y / 20,vertextHitnormal.z / 20));
-                        planeGeo.attributes.position.setXYZ( i, clampedPos );
+                        planeGeo.attributes.position.setXYZ( i, clampedPos.x, clampedPos.y, clampedPos.z );
                       }
                   }
       
