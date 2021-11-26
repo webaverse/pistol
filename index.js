@@ -52,7 +52,9 @@ export default () => {
   pointLights.push(bulletPointLight);
 
   const textureLoader = new THREE.TextureLoader();
-  const decalTexture = textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`);
+
+  const decalTextureName = "bulletHole.jpg";
+  const decalTexture = textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}${ decalTextureName}`);
   decalTexture.needsUpdate = true;
   const decalMaterial = new THREE.MeshPhysicalMaterial({map:decalTexture, alphaMap: decalTexture, transparent: true, depthWrite: true, depthTest: true});
   decalMaterial.needsUpdate = true;
@@ -215,8 +217,9 @@ export default () => {
                         const dummyPosition = new THREE.Object3D();
                         scene.add( dummyPosition );
                         const convertedVal = new Float32Array(vertexRaycast.point)
+                        const offSet = 14;
                         const pointVec =  dummyPosition.localToWorld(new THREE.Vector3().fromArray(convertedVal).add(
-                          new Vector3(0, vertextHitnormal.y / 14,0 )
+                          new Vector3(0, vertextHitnormal.y / offSet,0 )
                         ));
 
                         if (debugDecalVertPos) {
