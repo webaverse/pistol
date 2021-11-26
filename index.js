@@ -55,6 +55,7 @@ export default () => {
 
   //TODO give variables more recognisable names for decals
   //texture name need to be own const 
+  //rename material and tex
   const tex = textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`);
   tex.needsUpdate = true;
   const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: true, depthTest: true});
@@ -277,7 +278,7 @@ export default () => {
                         
                         const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
                         const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-                        const debugCube = new THREE.Mesh( debugGeo, debugMat );
+                        const debugCube = new THREE.Object3D();
                         scene.add( debugCube );
                         const convertedVal = new Float32Array(vertexRaycast.point)
                         const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal).add(
