@@ -51,6 +51,43 @@ export default () => {
   worldLights.add(bulletPointLight);
   pointLights.push(bulletPointLight);
 
+  const textureLoader = new THREE.TextureLoader();
+
+  //TODO give variables more recognisable names for decals
+  //texture name need to be own const 
+  const tex = textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`);
+  tex.needsUpdate = true;
+  const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: true, depthTest: true});
+  material.needsUpdate = true;
+
+  /* //new Promise(async (resolve, reject)=> {
+            const textureLoader = new THREE.TextureLoader();
+            textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, async (tex) => {
+                tex.needsUpdate = true;
+                const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: true, depthTest: true});
+                material.needsUpdate = true;
+                plane = new THREE.Mesh( planeGeo, material);
+                plane.name = "PlaneTest"
+                const newPointVec = new THREE.Vector3().fromArray(result.point);
+                const modiPoint = newPointVec.add(new Vector3(0, normal.y /20 ,0));
+                plane.position.copy(modiPoint);
+                plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
+                  plane.position,
+                  plane.position.clone().sub(normal),
+                  upVector
+                ));
+  
+                scene.add(plane);
+                plane.updateMatrix();
+
+                console.log("CREATED PLANE")
+                if(scene.getObjectByName('PlaneTest')) {
+                  //resolve();
+
+                }
+                console.log(planeGeo);
+              });*/
+
   let gunApp = null;
   let explosionApp = null;
   let subApps = [null, null];
@@ -167,10 +204,23 @@ export default () => {
             // PUT DECAL CODE HERE
             const normal = new THREE.Vector3().fromArray(result.normal);
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8)
-            let plane = new THREE.Mesh();
+            let plane = new THREE.Mesh( planeGeo, material);
+            plane.name = "PlaneTest"
+            const newPointVec = new THREE.Vector3().fromArray(result.point);
+            const modiPoint = newPointVec.add(new Vector3(0, normal.y /20 ,0));
+            plane.position.copy(modiPoint);
+            plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
+              plane.position,
+              plane.position.clone().sub(normal),
+              upVector
+            ));
 
-            //new Promise(async (resolve, reject)=> {
-              const textureLoader = new THREE.TextureLoader();
+            scene.add(plane);
+            plane.updateMatrix();
+            
+
+           /* //new Promise(async (resolve, reject)=> {
+            const textureLoader = new THREE.TextureLoader();
             textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, async (tex) => {
                 tex.needsUpdate = true;
                 const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: true, depthTest: true});
@@ -195,7 +245,7 @@ export default () => {
 
                 }
                 console.log(planeGeo);
-              });
+              });*/
              
            // }).then((resolve)=> {
 
