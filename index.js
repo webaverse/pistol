@@ -61,6 +61,7 @@ export default () => {
   const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: true, depthTest: true});
   material.needsUpdate = true;
   const debugMesh = [];
+  const debugDecalVertPos = true;
 
   /* //new Promise(async (resolve, reject)=> {
             const textureLoader = new THREE.TextureLoader();
@@ -278,7 +279,7 @@ export default () => {
                         vertexHits++;
                         
 
-                        if (debugMesh.length < ptCout) {
+                        if (debugMesh.length < ptCout && debugDecalVertPos) {
                           const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
                           const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
                           const debugCube = new THREE.Mesh(debugGeo, debugMat);
@@ -291,8 +292,12 @@ export default () => {
                         const pointVec =  dummyPosition.localToWorld(new THREE.Vector3().fromArray(convertedVal).add(
                           new Vector3(0, vertextHitnormal.y / 14,0 )
                         ));
-                        debugMesh[i].position.set(pointVec.x, pointVec.y, pointVec.z);
-                        debugMesh[i].updateWorldMatrix();
+
+                        if (debugDecalVertPos) {
+                          debugMesh[i].position.set(pointVec.x, pointVec.y, pointVec.z);
+                          debugMesh[i].updateWorldMatrix();
+                        }
+                        
 
                         dummyPosition.position.set(pointVec.x, pointVec.y, pointVec.z);
                         dummyPosition.updateWorldMatrix();
