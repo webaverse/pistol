@@ -52,44 +52,12 @@ export default () => {
   pointLights.push(bulletPointLight);
 
   const textureLoader = new THREE.TextureLoader();
-
-  //TODO give variables more recognisable names for decals
-  //texture name need to be own const 
-  //rename material and tex
-  const tex = textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`);
-  tex.needsUpdate = true;
-  const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: true, depthTest: true});
-  material.needsUpdate = true;
+  const decalTexture = textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`);
+  decalTexture.needsUpdate = true;
+  const decalMaterial = new THREE.MeshPhysicalMaterial({map:decalTexture, alphaMap: decalTexture, transparent: true, depthWrite: true, depthTest: true});
+  decalMaterial.needsUpdate = true;
   const debugMesh = [];
   const debugDecalVertPos = true;
-
-  /* //new Promise(async (resolve, reject)=> {
-            const textureLoader = new THREE.TextureLoader();
-            textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.jpg`, async (tex) => {
-                tex.needsUpdate = true;
-                const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: true, depthTest: true});
-                material.needsUpdate = true;
-                plane = new THREE.Mesh( planeGeo, material);
-                plane.name = "PlaneTest"
-                const newPointVec = new THREE.Vector3().fromArray(result.point);
-                const modiPoint = newPointVec.add(new Vector3(0, normal.y /20 ,0));
-                plane.position.copy(modiPoint);
-                plane.quaternion.setFromRotationMatrix( new THREE.Matrix4().lookAt(
-                  plane.position,
-                  plane.position.clone().sub(normal),
-                  upVector
-                ));
-  
-                scene.add(plane);
-                plane.updateMatrix();
-
-                console.log("CREATED PLANE")
-                if(scene.getObjectByName('PlaneTest')) {
-                  //resolve();
-
-                }
-                console.log(planeGeo);
-              });*/
 
   let gunApp = null;
   let explosionApp = null;
@@ -207,7 +175,7 @@ export default () => {
             // Decal creation
             const normal = new THREE.Vector3().fromArray(result.normal);
             const planeGeo = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8)
-            let plane = new THREE.Mesh( planeGeo, material);
+            let plane = new THREE.Mesh( planeGeo, decalMaterial);
             plane.name = "DecalPlane"
             const newPointVec = new THREE.Vector3().fromArray(result.point);
             const modiPoint = newPointVec.add(new Vector3(0, normal.y /20 ,0));
@@ -230,14 +198,10 @@ export default () => {
               {
                 for (let i = 0; i < ptCout; i++)
                   {
-                      //
                       let p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
-  
                       const pToWorld = plane.localToWorld(p);
-  
                       const vertexRaycast = physics.raycast(pToWorld, plane.quaternion.clone());
   
-                      //TODO convert point to floatarray?
                       if(vertexRaycast) {
   
                         const vertextHitnormal = new THREE.Vector3().fromArray(vertexRaycast.normal);
@@ -264,8 +228,10 @@ export default () => {
                         dummyPosition.updateWorldMatrix();
                         const worldToLoc = plane.worldToLocal(pointVec)
 
-                        const clampedPos = new Vector3(clamp(worldToLoc.x, -0.25, 3), clamp(worldToLoc.y, -0.25, 3), clamp(worldToLoc.z, -0.25, 3));
-                        console.log(clampedPos)
+                        const minClamp = -0.25;
+                        const maxClamp = 3;
+                        const clampedPos = new Vector3(clamp(worldToLoc.x, minClamp, maxClamp), 
+                        clamp(worldToLoc.y, minClamp, maxClamp), clamp(worldToLoc.z, minClamp, maxClamp));
                         planeGeo.attributes.position.setXYZ( i, clampedPos.x, clampedPos.y, clampedPos.z );
                       }
                   }
