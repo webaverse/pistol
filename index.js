@@ -171,7 +171,7 @@ export default () => {
 
             //new Promise(async (resolve, reject)=> {
               const textureLoader = new THREE.TextureLoader();
-            textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}homer.png`, async (tex) => {
+            textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}bulletHole.png`, async (tex) => {
                 tex.needsUpdate = true;
                 const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: true, depthTest: true});
                 material.needsUpdate = true;
