@@ -60,6 +60,7 @@ export default () => {
   tex.needsUpdate = true;
   const material = new THREE.MeshPhysicalMaterial({map:tex, alphaMap: tex, transparent: true, depthWrite: true, depthTest: true});
   material.needsUpdate = true;
+  const debugMesh = [];
 
   /* //new Promise(async (resolve, reject)=> {
             const textureLoader = new THREE.TextureLoader();
@@ -276,16 +277,25 @@ export default () => {
                         const vertextHitnormal = new THREE.Vector3().fromArray(vertexRaycast.normal);
                         vertexHits++;
                         
-                        const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
-                        const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-                        const debugCube = new THREE.Object3D();
-                        scene.add( debugCube );
+
+                        if (debugMesh.length < ptCout) {
+                          const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
+                          const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+                          const debugCube = new THREE.Mesh(debugGeo, debugMat);
+                          debugMesh.push(debugCube);
+                          scene.add( debugCube );
+                        }
+                        const dummyPosition = new THREE.Object3D();
+                        scene.add( dummyPosition );
                         const convertedVal = new Float32Array(vertexRaycast.point)
-                        const pointVec =  debugCube.localToWorld(new THREE.Vector3().fromArray(convertedVal).add(
+                        const pointVec =  dummyPosition.localToWorld(new THREE.Vector3().fromArray(convertedVal).add(
                           new Vector3(0, vertextHitnormal.y / 14,0 )
                         ));
-                        debugCube.position.set(pointVec.x, pointVec.y, pointVec.z);
-                        debugCube.updateWorldMatrix();
+                        debugMesh[i].position.set(pointVec.x, pointVec.y, pointVec.z);
+                        debugMesh[i].updateWorldMatrix();
+
+                        dummyPosition.position.set(pointVec.x, pointVec.y, pointVec.z);
+                        dummyPosition.updateWorldMatrix();
                         const worldToLoc = plane.worldToLocal(pointVec)
                         //console.log("Hit position world: debugCube", debugCube);
                         //console.log("Plane world position", plane)
