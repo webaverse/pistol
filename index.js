@@ -20,7 +20,7 @@ export default () => {
   
   const soundManager = useSoundManager();
 
-  let pistolSound = `${baseUrl}shoot.wav`;
+  let pistolSound = `${baseUrl}shoot.mp3`;
   soundManager.loadSound('pistol',pistolSound);
 
   const physics = usePhysics();
