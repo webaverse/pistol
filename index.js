@@ -225,8 +225,8 @@ export default () => {
     wearing = wear;
   });
   
-  useUse(() => {
-    if (gunApp) {
+  useUse(e => {
+    if (e.use && gunApp) {
       gunApp.use();
     }
   });
