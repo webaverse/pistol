@@ -62,20 +62,21 @@ export default () => {
   const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
   const decalTextureName = "bulletHole.jpg";
   const decalTexture = textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}${ decalTextureName}`);
-  decalTexture.needsUpdate = true;
+  // decalTexture.needsUpdate = true;
   const decalMaterial = new THREE.MeshPhysicalMaterial({
     // color: 0xFF0000,
     map: decalTexture,
     alphaMap: decalTexture,
     transparent: true,
-    depthWrite: true,
-    depthTest: true,
+    alphaTest: 0.01,
+    // depthWrite: true,
+    // depthTest: true,
   });
   decalMaterial.needsUpdate = true;
   // const debugMesh = [];
   const debugDecalVertPos = false;
 
-  const maxNumDecals = 4;
+  const maxNumDecals = 128;
   const decalGeometry = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8).toNonIndexed();
   const _makeDecalMesh = () => {
     const geometry = new THREE.BufferGeometry();
@@ -220,7 +221,7 @@ export default () => {
 
             const normal = new THREE.Vector3().fromArray(result.normal);
             const newPointVec = new THREE.Vector3().fromArray(result.point);
-            const modiPoint = newPointVec.add(new Vector3(0, normal.y /20 ,0));
+            const modiPoint = newPointVec.clone().add(normal.clone().multiplyScalar(0.01));
             
             const pos = modiPoint;
             const q = new THREE.Quaternion().setFromRotationMatrix( new THREE.Matrix4().lookAt(
@@ -259,10 +260,10 @@ export default () => {
                   );
                 pointVec.applyMatrix4(planeMatrixInverse);
                 const minClamp = -0.25;
-                const maxClamp = 3;
+                const maxClamp = 0.25;
                 pointVec.sub(p);
-                pointVec.x = clamp(pointVec.x, minClamp, maxClamp);
-                pointVec.y = clamp(pointVec.y, minClamp, maxClamp);
+                // pointVec.x = clamp(pointVec.x, minClamp, maxClamp);
+                // pointVec.y = clamp(pointVec.y, minClamp, maxClamp);
                 pointVec.z = clamp(pointVec.z, minClamp, maxClamp);
                 pointVec.add(p);
                 pointVec.applyMatrix4(planeMatrix);
@@ -282,6 +283,8 @@ export default () => {
                 
                 pointVec.toArray(positions, i * 3);
                 // decalGeometry.attributes.position.setXYZ( i, clampedPos.x, clampedPos.y, clampedPos.z );
+              }  else {
+                pToWorld.toArray(positions, i * 3);
               }
             }
 
@@ -297,9 +300,25 @@ export default () => {
               // decalMesh.geometry.index.setX( i + offset, localDecalGeometry.index.getX(i) );
             }
             // flag geometry attributes for update
+            decalMesh.geometry.attributes.position.updateRange = {
+              offset: offset*3,
+              count: localDecalGeometry.attributes.position.array.length,
+            };
             decalMesh.geometry.attributes.position.needsUpdate = true;
+            decalMesh.geometry.attributes.uv.updateRange = {
+              offset: offset*2,
+              count: localDecalGeometry.attributes.uv.array.length,
+            };
             decalMesh.geometry.attributes.uv.needsUpdate = true;
+            decalMesh.geometry.attributes.normal.updateRange = {
+              offset: offset*3,
+              count: localDecalGeometry.attributes.normal.array.length,
+            };
             decalMesh.geometry.attributes.normal.needsUpdate = true;
+            // decalMesh.geometry.index.updateRange = {
+            //   offset,
+            //   count: localDecalGeometry.index.count,
+            // };
             //decalMesh.geometry.index.needsUpdate = true;
             // update geometry attribute offset
             decalMesh.offset += localDecalGeometry.attributes.position.count;
