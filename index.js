@@ -276,6 +276,8 @@ export default () => {
                 
                 pointVec.toArray(positions, i * 3);
                 // decalGeometry.attributes.position.setXYZ( i, clampedPos.x, clampedPos.y, clampedPos.z );
+              }  else {
+                pToWorld.toArray(positions, i * 3);
               }
             }
 
