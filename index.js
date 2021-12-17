@@ -295,17 +295,17 @@ export default () => {
             // flag geometry attributes for update
             decalMesh.geometry.attributes.position.updateRange = {
               offset: offset*3,
-              count: localDecalGeometry.attributes.position.count*3,
+              count: localDecalGeometry.attributes.position.array.length,
             };
             decalMesh.geometry.attributes.position.needsUpdate = true;
             decalMesh.geometry.attributes.uv.updateRange = {
               offset: offset*2,
-              count: localDecalGeometry.attributes.uv.count*2,
+              count: localDecalGeometry.attributes.uv.array.length,
             };
             decalMesh.geometry.attributes.uv.needsUpdate = true;
             decalMesh.geometry.attributes.normal.updateRange = {
               offset: offset*3,
-              count: localDecalGeometry.attributes.normal.count*3,
+              count: localDecalGeometry.attributes.normal.array.length,
             };
             decalMesh.geometry.attributes.normal.needsUpdate = true;
             // decalMesh.geometry.index.updateRange = {
