@@ -70,7 +70,7 @@ export default () => {
   // const debugMesh = [];
   const debugDecalVertPos = false;
 
-  const maxNumDecals = 4;
+  const maxNumDecals = 128;
   const decalGeometry = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8).toNonIndexed();
   const _makeDecalMesh = () => {
     const geometry = new THREE.BufferGeometry();
