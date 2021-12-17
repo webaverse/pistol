@@ -57,7 +57,7 @@ export default () => {
   const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
   const decalTextureName = "bulletHole.jpg";
   const decalTexture = textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}${ decalTextureName}`);
-  decalTexture.needsUpdate = true;
+  // decalTexture.needsUpdate = true;
   const decalMaterial = new THREE.MeshPhysicalMaterial({
     // color: 0xFF0000,
     map: decalTexture,
