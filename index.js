@@ -255,7 +255,6 @@ export default () => {
                 const minClamp = -0.25;
                 const maxClamp = 0.25;
                 pointVec.sub(p);
-                // console.log('got inner', pointVec.toArray().join(','));
                 // pointVec.x = clamp(pointVec.x, minClamp, maxClamp);
                 // pointVec.y = clamp(pointVec.y, minClamp, maxClamp);
                 pointVec.z = clamp(pointVec.z, minClamp, maxClamp);
