@@ -290,9 +290,25 @@ export default () => {
               // decalMesh.geometry.index.setX( i + offset, localDecalGeometry.index.getX(i) );
             }
             // flag geometry attributes for update
+            decalMesh.geometry.attributes.position.updateRange = {
+              offset: offset*3,
+              count: localDecalGeometry.attributes.position.count*3,
+            };
             decalMesh.geometry.attributes.position.needsUpdate = true;
+            decalMesh.geometry.attributes.uv.updateRange = {
+              offset: offset*2,
+              count: localDecalGeometry.attributes.uv.count*2,
+            };
             decalMesh.geometry.attributes.uv.needsUpdate = true;
+            decalMesh.geometry.attributes.normal.updateRange = {
+              offset: offset*3,
+              count: localDecalGeometry.attributes.normal.count*3,
+            };
             decalMesh.geometry.attributes.normal.needsUpdate = true;
+            // decalMesh.geometry.index.updateRange = {
+            //   offset,
+            //   count: localDecalGeometry.index.count,
+            // };
             //decalMesh.geometry.index.needsUpdate = true;
             // update geometry attribute offset
             decalMesh.offset += localDecalGeometry.attributes.position.count;
