@@ -214,7 +214,7 @@ export default () => {
 
             const normal = new THREE.Vector3().fromArray(result.normal);
             const newPointVec = new THREE.Vector3().fromArray(result.point);
-            const modiPoint = newPointVec.add(new Vector3(0, normal.y /20 ,0));
+            const modiPoint = newPointVec.clone().add(normal.clone().multiplyScalar(0.01));
             
             const pos = modiPoint;
             const q = new THREE.Quaternion().setFromRotationMatrix( new THREE.Matrix4().lookAt(
