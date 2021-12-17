@@ -63,8 +63,9 @@ export default () => {
     map: decalTexture,
     alphaMap: decalTexture,
     transparent: true,
-    depthWrite: true,
-    depthTest: true,
+    alphaTest: 0.01,
+    // depthWrite: true,
+    // depthTest: true,
   });
   decalMaterial.needsUpdate = true;
   // const debugMesh = [];
