@@ -417,7 +417,7 @@ export default () => {
         subApp.destroy();
       }
     }
-    scene.remove(plane);
+    scene.remove(decalMesh);
   });
 
   return app;
