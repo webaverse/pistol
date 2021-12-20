@@ -379,7 +379,8 @@ export default () => {
     // Pistol is droped?
     if (!wearing) {
 
-      const quaternion = new THREE.Quaternion(-0.7071068, 0, 0, 0.7071068); // Facing ground
+      const quaternion = new THREE.Quaternion();
+      quaternion.setFromAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI*0.5);
 
       const newPosition = new THREE.Vector3();
       newPosition.copy(app.position);
