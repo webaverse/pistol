@@ -375,6 +375,32 @@ export default () => {
       });
     }
     wearing = wear;
+
+    // Pistol is droped?
+    if (!wearing) {
+
+      const quaternion = new THREE.Quaternion(-0.7071068, 0, 0, 0.7071068); // Facing ground
+
+      const newPosition = new THREE.Vector3();
+      newPosition.copy(app.position);
+
+      const result = physics.raycast(app.position, quaternion);
+      if (result) {
+        newPosition.fromArray(result.point);
+        newPosition.y += 0.5;
+      }      
+
+      const wearComponent = gunApp.getComponent('wear');
+
+      app.quaternion.identity();
+      app.scale.set(1, 1, 1);
+      app.updateMatrixWorld();
+
+      gunApp.position.copy(newPosition);
+      gunApp.quaternion.copy(app.quaternion);
+      gunApp.scale.fromArray(wearComponent.scale);
+      gunApp.updateMatrixWorld();
+    }
   });
   
   useUse(e => {
