@@ -172,7 +172,7 @@ export default () => {
         {
           "key": "use",
           "value": {
-            "subtype": "pistol"
+            "ik": "pistol"
           }
         }
       ];
