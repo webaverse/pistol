@@ -338,9 +338,15 @@ export default () => {
             bulletPointLight.endTime = bulletPointLight.startTime + bulletSparkTime;
           
             if (targetApp) {
+              const localPlayer = useLocalPlayer();
               const damage = 2;
+              const hitDirection = targetApp.position.clone()
+                .sub(localPlayer.position);
+              // hitDirection.y = 0;
+              hitDirection.normalize();
               targetApp.hit(damage, {
                 collisionId: targetApp.willDieFrom(damage) ? result.objectId : null,
+                hitDirection,
               });
             } else {
               console.warn('no app with physics id', result.objectId);
