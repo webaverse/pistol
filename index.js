@@ -6,6 +6,8 @@ const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysic
 const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
 
 const localVector = new THREE.Vector3();
+const localMatrix = new THREE.Matrix4();
+
 const upVector = new THREE.Vector3(0, 1, 0);
 const z180Quaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
 const muzzleOffset = new THREE.Vector3(0, 0.1, 0.25);
@@ -340,13 +342,26 @@ export default () => {
             if (targetApp) {
               const localPlayer = useLocalPlayer();
               const damage = 2;
+
+              const hitPosition = new THREE.Vector3().fromArray(result.point);
+              const hitQuaternion = new THREE.Quaternion().setFromRotationMatrix(
+                localMatrix.lookAt(
+                  localPlayer.position,
+                  hitPosition,
+                  localVector.set(0, 1, 0)
+                )
+              );
+
               const hitDirection = targetApp.position.clone()
                 .sub(localPlayer.position);
               // hitDirection.y = 0;
               hitDirection.normalize();
+              
               targetApp.hit(damage, {
                 collisionId: targetApp.willDieFrom(damage) ? result.objectId : null,
+                hitPosition,
                 hitDirection,
+                hitQuaternion,
               });
             } else {
               console.warn('no app with physics id', result.objectId);
