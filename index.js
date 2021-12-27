@@ -357,11 +357,13 @@ export default () => {
               // hitDirection.y = 0;
               hitDirection.normalize();
               
+              const willDie = targetApp.willDieFrom(damage);
               targetApp.hit(damage, {
-                collisionId: targetApp.willDieFrom(damage) ? result.objectId : null,
+                collisionId: result.objectId,
                 hitPosition,
                 hitDirection,
                 hitQuaternion,
+                willDie,
               });
             } else {
               console.warn('no app with physics id', result.objectId);
