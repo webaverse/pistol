@@ -392,6 +392,11 @@ export default () => {
   useWear(e => {
     const {wear} = e;
     for (const subApp of subApps) {
+      subApp.position.copy(app.position);
+      subApp.quaternion.copy(app.quaternion);
+      subApp.scale.copy(app.scale);
+      subApp.updateMatrixWorld();
+      
       subApp.dispatchEvent({
         type: 'wearupdate',
         wear,
