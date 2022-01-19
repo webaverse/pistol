@@ -17,7 +17,7 @@ const bulletSparkTime = 300;
 const emptyArray = [];
 const fnEmptyArray = () => emptyArray;
 
-export default () => {
+export default e => {
   const app = useApp();
   app.name = 'pistol';
 
@@ -102,7 +102,7 @@ export default () => {
   let gunApp = null;
   let explosionApp = null;
   let subApps = [null, null];
-  (async () => {
+  e.waitUntil((async () => {
     {
       let u2 = `https://webaverse.github.io/pixelsplosion/`;
       if (/^https?:/.test(u2)) {
@@ -372,7 +372,7 @@ export default () => {
         }
       });
     }
-  })();
+  })());
   
   app.getPhysicsObjects = () => {
     return gunApp ? gunApp.getPhysicsObjectsOriginal() : [];
