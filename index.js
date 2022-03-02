@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import metaversefile from 'metaversefile';
-import { clamp } from 'three/src/math/MathUtils.js';
+import { MathUtils } from 'three';
 const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysics, useScene, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup} = metaversefile;
 
+const {clamp} = MathUtils;
 const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
 
 const localVector = new THREE.Vector3();
