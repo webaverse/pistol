@@ -20,10 +20,12 @@ const fnEmptyArray = () => emptyArray;
 
 export default e => {
   const app = useApp();
-  app.name = 'pistol';
-
   const physics = usePhysics();
   const scene = useScene();
+  
+  app.name = 'pistol';
+
+  const worldLights = app;
   
   /* const _updateSubAppMatrix = subApp => {
     subApp.updateMatrixWorld();
@@ -40,8 +42,8 @@ export default e => {
   gunPointLight.startTime = 0;
   gunPointLight.endTime = 0;
   gunPointLight.initialIntensity = gunPointLight.intensity;
-  const world = useWorld();
-  const worldLights = world.getLights();
+  // const world = useWorld();
+  // const worldLights = world.getLights();
   worldLights.add(gunPointLight);
   pointLights.push(gunPointLight);
   
