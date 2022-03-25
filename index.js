@@ -25,7 +25,7 @@ export default e => {
   
   app.name = 'pistol';
 
-  const worldLights = app;
+  //const worldLights = app;
   
   /* const _updateSubAppMatrix = subApp => {
     subApp.updateMatrixWorld();
@@ -42,8 +42,8 @@ export default e => {
   gunPointLight.startTime = 0;
   gunPointLight.endTime = 0;
   gunPointLight.initialIntensity = gunPointLight.intensity;
-  // const world = useWorld();
-  // const worldLights = world.getLights();
+  const world = useWorld();
+  const worldLights = world.getLights();
   worldLights.add(gunPointLight);
   pointLights.push(gunPointLight);
   
@@ -127,6 +127,7 @@ export default e => {
 
       await explosionApp.addModule(m);
       scene.add(explosionApp);
+      explosionApp.add( bulletPointLight );
       // metaversefile.addApp(explosionApp);
     }
     
@@ -338,7 +339,7 @@ export default e => {
             explosionApp.setComponent('rate', 0.5);
             explosionApp.use();
             
-            bulletPointLight.position.copy(explosionApp.position);
+            // bulletPointLight.position.copy(explosionApp.position);
             bulletPointLight.startTime = performance.now();
             bulletPointLight.endTime = bulletPointLight.startTime + bulletSparkTime;
           
