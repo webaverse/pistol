@@ -26,7 +26,6 @@ export default e => {
   app.name = 'pistol';
 
   const worldLights = app;
-  
   /* const _updateSubAppMatrix = subApp => {
     subApp.updateMatrixWorld();
     app.position.copy(subApp.position);
@@ -44,7 +43,7 @@ export default e => {
   gunPointLight.initialIntensity = gunPointLight.intensity;
   // const world = useWorld();
   // const worldLights = world.getLights();
-  worldLights.add(gunPointLight);
+  // worldLights.add(gunPointLight);
   pointLights.push(gunPointLight);
   
   const bulletPointLight = new THREE.PointLight(0xef5350, 5, 10);
@@ -52,7 +51,7 @@ export default e => {
   bulletPointLight.startTime = 0;
   bulletPointLight.endTime = 0;
   bulletPointLight.initialIntensity = bulletPointLight.intensity;
-  worldLights.add(bulletPointLight);
+  // worldLights.add(bulletPointLight);
   pointLights.push(bulletPointLight);
 
   const textureLoader = new THREE.TextureLoader();
@@ -127,6 +126,7 @@ export default e => {
 
       await explosionApp.addModule(m);
       scene.add(explosionApp);
+      explosionApp.add( bulletPointLight );
       // metaversefile.addApp(explosionApp);
     }
     
@@ -147,6 +147,7 @@ export default e => {
       gunApp.getPhysicsObjectsOriginal = gunApp.getPhysicsObjects;
       gunApp.getPhysicsObjects = fnEmptyArray;
       subApps[1] = gunApp;
+      gunApp.add(gunPointLight);
       
       const components = [
         {
@@ -338,7 +339,7 @@ export default e => {
             explosionApp.setComponent('rate', 0.5);
             explosionApp.use();
             
-            bulletPointLight.position.copy(explosionApp.position);
+            // bulletPointLight.position.copy(explosionApp.position);
             bulletPointLight.startTime = performance.now();
             bulletPointLight.endTime = bulletPointLight.startTime + bulletSparkTime;
           
@@ -430,8 +431,9 @@ export default e => {
     }
     
     if (gunApp) {
-      gunPointLight.position.copy(gunApp.position)
-        .add(localVector.copy(muzzleOffset).applyQuaternion(gunApp.quaternion));
+      
+      gunPointLight.position.set(0,0,0)
+      .add(localVector.copy(muzzleOffset).applyQuaternion(gunApp.quaternion));
       gunPointLight.updateMatrixWorld();
     }
       
