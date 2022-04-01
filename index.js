@@ -219,7 +219,7 @@ export default e => {
         {
           const result = physics.raycast(gunApp.position, gunApp.quaternion.clone().multiply(z180Quaternion));
           if (result) {
-            sounds.playSound(soundFiles.combat[soundIndex]);
+            
             const targetApp = getAppByPhysicsId(result.objectId);
 
             const normal = new THREE.Vector3().fromArray(result.normal);
@@ -416,6 +416,7 @@ export default e => {
   
   useUse(e => {
     if (e.use && gunApp) {
+      sounds.playSound(soundFiles.combat[soundIndex]);
       gunApp.use();
     }
   });
