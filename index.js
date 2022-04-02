@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import metaversefile from 'metaversefile';
 import { MathUtils } from 'three';
-const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysics, useScene, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup} = metaversefile;
+const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysics, useScene, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup, useSound} = metaversefile;
 
 const {clamp} = MathUtils;
 const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
@@ -34,6 +34,10 @@ export default e => {
     app.matrix.copy(subApp.matrix);
     app.matrixWorld.copy(subApp.matrixWorld);
   }; */
+  const sounds = useSound();
+  const soundFiles = sounds.getSoundFiles();
+  const soundIndex=soundFiles.combat.map(sound => sound.name).indexOf('combat/Colt45_Shot2.wav');
+  
   
   let pointLights = [];
   const gunPointLight = new THREE.PointLight(0xFFFFFF, 5);
@@ -215,6 +219,7 @@ export default e => {
         {
           const result = physics.raycast(gunApp.position, gunApp.quaternion.clone().multiply(z180Quaternion));
           if (result) {
+            
             const targetApp = getAppByPhysicsId(result.objectId);
 
             const normal = new THREE.Vector3().fromArray(result.normal);
@@ -411,6 +416,7 @@ export default e => {
   
   useUse(e => {
     if (e.use && gunApp) {
+      sounds.playSound(soundFiles.combat[soundIndex]);
       gunApp.use();
     }
   });
