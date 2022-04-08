@@ -388,11 +388,6 @@ export default e => {
   };
   
   useActivate(() => {
-    // console.log('activate', subApps);
-    /* for (const subApp of subApps) {
-      subApp && subApp.activate();
-    } */
-    
     const localPlayer = useLocalPlayer();
     localPlayer.wear(app);
   });
