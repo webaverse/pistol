@@ -78,8 +78,17 @@ export default e => {
   // const debugMesh = [];
   const debugDecalVertPos = false;
 
+  
+
+
   const maxNumDecals = 128;
   const decalGeometry = new THREE.PlaneBufferGeometry(0.5, 0.5, 8, 8).toNonIndexed();
+  
+  let currentDecal = 0;
+  let collisionTime = [];
+  for(let i = 0; i < maxNumDecals; i++){
+    collisionTime[i] = -1;
+  }
   const _makeDecalMesh = () => {
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(decalGeometry.attributes.position.array.length * maxNumDecals);
@@ -219,7 +228,6 @@ export default e => {
         {
           const result = physics.raycast(gunApp.position, gunApp.quaternion.clone().multiply(z180Quaternion));
           if (result) {
-            
             const targetApp = getAppByPhysicsId(result.objectId);
 
             const normal = new THREE.Vector3().fromArray(result.normal);
@@ -324,9 +332,11 @@ export default e => {
             // };
             //decalMesh.geometry.index.needsUpdate = true;
             // update geometry attribute offset
+
             decalMesh.offset += localDecalGeometry.attributes.position.count;
             decalMesh.offset = decalMesh.offset % decalMesh.geometry.attributes.position.count;
-
+            currentDecal++;
+            
             explosionApp.position.fromArray(result.point);
             explosionApp.quaternion.setFromRotationMatrix(
               new THREE.Matrix4().lookAt(
@@ -420,8 +430,29 @@ export default e => {
       gunApp.use();
     }
   });
-
+  let positionAttributeLength = decalGeometry.attributes.position.array.length/3;
   useFrame(({timestamp}) => {
+    if(currentDecal>0){
+      //handle if index equal -1 
+      let index = decalMesh.offset / positionAttributeLength - 1 >= 0 ? decalMesh.offset / positionAttributeLength - 1 : maxNumDecals - 1;
+      if(collisionTime[index] == -1){ //means haven't recorded the collision time
+        collisionTime[index] = timestamp;
+      }
+      for(let i = 0; i < maxNumDecals; i++){
+        // if collision time larger than 1.5 sec, then clean the position attribute
+        if(collisionTime[i] != -1 && timestamp - collisionTime[i] > 1500){
+          collisionTime[i] = -1;
+          for(let j = 0; j < positionAttributeLength; j++)
+            decalMesh.geometry.attributes.position.setXYZ(i * positionAttributeLength + j, 0, 0, 0);
+          currentDecal--;
+        }
+      }
+      decalMesh.geometry.attributes.position.needsUpdate = true;
+    }
+    
+    
+    
+    
     if (!wearing) {
       if (gunApp) {
         gunApp.position.copy(app.position);
