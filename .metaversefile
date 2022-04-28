@@ -4,7 +4,9 @@
   "components": [
     {
       "key": "aim",
-      "value": {}
+      "value": {
+        "ikHand": "right"
+      }
     },
     {
       "key": "use",
