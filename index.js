@@ -217,167 +217,142 @@ export default e => {
 
         // bullet hit
         {
-          const result = physics.raycast(gunApp.position, gunApp.quaternion.clone().multiply(z180Quaternion));
-          if (result) {
-            
-            const targetApp = getAppByPhysicsId(result.objectId);
-
-            const normal = new THREE.Vector3().fromArray(result.normal);
-            const newPointVec = new THREE.Vector3().fromArray(result.point);
-            const modiPoint = newPointVec.clone().add(normal.clone().multiplyScalar(0.01));
-            
-            const pos = modiPoint;
-            const q = new THREE.Quaternion().setFromRotationMatrix( new THREE.Matrix4().lookAt(
-              pos,
-              pos.clone().sub(normal),
-              upVector
-            ));
-            const s = new THREE.Vector3(1, 1, 1);
-            const planeMatrix = new THREE.Matrix4().compose(
-              pos,
-              q,
-              s
-            );
-            const planeMatrixInverse = planeMatrix.clone().invert();
-
-            const localDecalGeometry = decalGeometry.clone();
-            const positions = localDecalGeometry.attributes.position.array;
-            for (let i = 0; i < positions.length; i++) {
-              const p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
-              const pToWorld = p.clone().applyMatrix4(planeMatrix);
-              const vertexRaycast = physics.raycast(pToWorld, q.clone());
-
-              if (vertexRaycast) {
-                const vertextHitnormal = new THREE.Vector3().fromArray(vertexRaycast.normal);
-
-                /* const dummyPosition = new THREE.Object3D();
-                scene.add( dummyPosition );
-                const offSet = 14;
-                const pointVec =  dummyPosition.localToWorld(new THREE.Vector3().fromArray(vertexRaycast.point).add(
-                  new Vector3(0, vertextHitnormal.y / offSet,0 )
-                )); */
-                const pointVec = new THREE.Vector3()
-                  .fromArray(vertexRaycast.point)
-                  .add(
-                    vertextHitnormal.clone().multiplyScalar(0.01)
-                  );
-                pointVec.applyMatrix4(planeMatrixInverse);
-                const minClamp = -0.25;
-                const maxClamp = 0.25;
-                pointVec.sub(p);
-                // pointVec.x = clamp(pointVec.x, minClamp, maxClamp);
-                // pointVec.y = clamp(pointVec.y, minClamp, maxClamp);
-                pointVec.z = clamp(pointVec.z, minClamp, maxClamp);
-                pointVec.add(p);
-                pointVec.applyMatrix4(planeMatrix);
-                // const clampedPos = new Vector3(clamp(worldToLoc.x, minClamp, maxClamp), 
-                // clamp(worldToLoc.y, minClamp, maxClamp), clamp(worldToLoc.z, minClamp, maxClamp));
-
-                if (debugDecalVertPos) {
-                  const debugMesh = new THREE.Mesh(debugGeo, debugMat);
-                  debugMesh.position.set(pointVec.x, pointVec.y, pointVec.z);
-                  debugMesh.updateWorldMatrix();
-                  scene.add(debugMesh);
-                }
-
-                // dummyPosition.position.set(pointVec.x, pointVec.y, pointVec.z);
-                // dummyPosition.updateWorldMatrix();
-                // const worldToLoc = pointVec.clone().applyMatrix4(planeMatrixInverse);
-                
-                pointVec.toArray(positions, i * 3);
-                // decalGeometry.attributes.position.setXYZ( i, clampedPos.x, clampedPos.y, clampedPos.z );
-              }  else {
-                pToWorld.toArray(positions, i * 3);
-              }
-            }
-
-            localDecalGeometry.computeVertexNormals();
-            // now, we copy the localDecalGeometry into the decalMesh.geometry at the appropriate position
-            // we make sure to copy the position, uv, normal, and index. all of these attributes should be correctly offset
-            const offset = decalMesh.offset;
-            // console.log('offset', decalMesh.offset);
-            for (let i = 0; i < localDecalGeometry.attributes.position.count; i++) {
-              decalMesh.geometry.attributes.position.setXYZ( i + offset, localDecalGeometry.attributes.position.getX(i), localDecalGeometry.attributes.position.getY(i), localDecalGeometry.attributes.position.getZ(i) );
-              decalMesh.geometry.attributes.uv.setXY( i + offset, localDecalGeometry.attributes.uv.getX(i), localDecalGeometry.attributes.uv.getY(i) );
-              decalMesh.geometry.attributes.normal.setXYZ( i + offset, localDecalGeometry.attributes.normal.getX(i), localDecalGeometry.attributes.normal.getY(i), localDecalGeometry.attributes.normal.getZ(i) );
-              // decalMesh.geometry.index.setX( i + offset, localDecalGeometry.index.getX(i) );
-            }
-            // flag geometry attributes for update
-            decalMesh.geometry.attributes.position.updateRange = {
-              offset: offset*3,
-              count: localDecalGeometry.attributes.position.array.length,
-            };
-            decalMesh.geometry.attributes.position.needsUpdate = true;
-            decalMesh.geometry.attributes.uv.updateRange = {
-              offset: offset*2,
-              count: localDecalGeometry.attributes.uv.array.length,
-            };
-            decalMesh.geometry.attributes.uv.needsUpdate = true;
-            decalMesh.geometry.attributes.normal.updateRange = {
-              offset: offset*3,
-              count: localDecalGeometry.attributes.normal.array.length,
-            };
-            decalMesh.geometry.attributes.normal.needsUpdate = true;
-            // decalMesh.geometry.index.updateRange = {
-            //   offset,
-            //   count: localDecalGeometry.index.count,
-            // };
-            //decalMesh.geometry.index.needsUpdate = true;
-            // update geometry attribute offset
-            decalMesh.offset += localDecalGeometry.attributes.position.count;
-            decalMesh.offset = decalMesh.offset % decalMesh.geometry.attributes.position.count;
-
-            explosionApp.position.fromArray(result.point);
-            explosionApp.quaternion.setFromRotationMatrix(
-              new THREE.Matrix4().lookAt(
-                explosionApp.position,
-                explosionApp.position.clone()
-                  .sub(normal),
+          const hit = localPlayer.characterHitter.attemptHit({
+            type: 'bullet',
+            args: {
+              position: gunApp.position,
+              quaternion: gunApp.quaternion.clone().multiply(z180Quaternion),
+            },
+          });
+          if (hit) {
+            const _renderHitExplosion = () => {
+              const normal = new THREE.Vector3().fromArray(result.normal);
+              const newPointVec = new THREE.Vector3().fromArray(result.point);
+              const modiPoint = newPointVec.clone().add(normal.clone().multiplyScalar(0.01));
+              
+              const pos = modiPoint;
+              const q = new THREE.Quaternion().setFromRotationMatrix( new THREE.Matrix4().lookAt(
+                pos,
+                pos.clone().sub(normal),
                 upVector
-              )
-            );
-            // explosionApp.scale.copy(gunApp.scale);
-            explosionApp.updateMatrixWorld();
-            explosionApp.setComponent('color1', 0xef5350);
-            explosionApp.setComponent('color2', 0x000000);
-            explosionApp.setComponent('gravity', -0.5);
-            explosionApp.setComponent('rate', 0.5);
-            explosionApp.use();
-            
-            // bulletPointLight.position.copy(explosionApp.position);
-            bulletPointLight.startTime = performance.now();
-            bulletPointLight.endTime = bulletPointLight.startTime + bulletSparkTime;
-          
-            if (targetApp) {
-              const localPlayer = useLocalPlayer();
-              const damage = 2;
+              ));
+              const s = new THREE.Vector3(1, 1, 1);
+              const planeMatrix = new THREE.Matrix4().compose(
+                pos,
+                q,
+                s
+              );
+              const planeMatrixInverse = planeMatrix.clone().invert();
 
-              const hitPosition = new THREE.Vector3().fromArray(result.point);
-              const hitQuaternion = new THREE.Quaternion().setFromRotationMatrix(
-                localMatrix.lookAt(
-                  localPlayer.position,
-                  hitPosition,
-                  localVector.set(0, 1, 0)
+              const localDecalGeometry = decalGeometry.clone();
+              const positions = localDecalGeometry.attributes.position.array;
+              for (let i = 0; i < positions.length; i++) {
+                const p = new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+                const pToWorld = p.clone().applyMatrix4(planeMatrix);
+                const vertexRaycast = physics.raycast(pToWorld, q.clone());
+
+                if (vertexRaycast) {
+                  const vertextHitnormal = new THREE.Vector3().fromArray(vertexRaycast.normal);
+
+                  /* const dummyPosition = new THREE.Object3D();
+                  scene.add( dummyPosition );
+                  const offSet = 14;
+                  const pointVec =  dummyPosition.localToWorld(new THREE.Vector3().fromArray(vertexRaycast.point).add(
+                    new Vector3(0, vertextHitnormal.y / offSet,0 )
+                  )); */
+                  const pointVec = new THREE.Vector3()
+                    .fromArray(vertexRaycast.point)
+                    .add(
+                      vertextHitnormal.clone().multiplyScalar(0.01)
+                    );
+                  pointVec.applyMatrix4(planeMatrixInverse);
+                  const minClamp = -0.25;
+                  const maxClamp = 0.25;
+                  pointVec.sub(p);
+                  // pointVec.x = clamp(pointVec.x, minClamp, maxClamp);
+                  // pointVec.y = clamp(pointVec.y, minClamp, maxClamp);
+                  pointVec.z = clamp(pointVec.z, minClamp, maxClamp);
+                  pointVec.add(p);
+                  pointVec.applyMatrix4(planeMatrix);
+                  // const clampedPos = new Vector3(clamp(worldToLoc.x, minClamp, maxClamp), 
+                  // clamp(worldToLoc.y, minClamp, maxClamp), clamp(worldToLoc.z, minClamp, maxClamp));
+
+                  if (debugDecalVertPos) {
+                    const debugMesh = new THREE.Mesh(debugGeo, debugMat);
+                    debugMesh.position.set(pointVec.x, pointVec.y, pointVec.z);
+                    debugMesh.updateWorldMatrix();
+                    scene.add(debugMesh);
+                  }
+
+                  // dummyPosition.position.set(pointVec.x, pointVec.y, pointVec.z);
+                  // dummyPosition.updateWorldMatrix();
+                  // const worldToLoc = pointVec.clone().applyMatrix4(planeMatrixInverse);
+                  
+                  pointVec.toArray(positions, i * 3);
+                  // decalGeometry.attributes.position.setXYZ( i, clampedPos.x, clampedPos.y, clampedPos.z );
+                }  else {
+                  pToWorld.toArray(positions, i * 3);
+                }
+              }
+
+              localDecalGeometry.computeVertexNormals();
+              // now, we copy the localDecalGeometry into the decalMesh.geometry at the appropriate position
+              // we make sure to copy the position, uv, normal, and index. all of these attributes should be correctly offset
+              const offset = decalMesh.offset;
+              // console.log('offset', decalMesh.offset);
+              for (let i = 0; i < localDecalGeometry.attributes.position.count; i++) {
+                decalMesh.geometry.attributes.position.setXYZ( i + offset, localDecalGeometry.attributes.position.getX(i), localDecalGeometry.attributes.position.getY(i), localDecalGeometry.attributes.position.getZ(i) );
+                decalMesh.geometry.attributes.uv.setXY( i + offset, localDecalGeometry.attributes.uv.getX(i), localDecalGeometry.attributes.uv.getY(i) );
+                decalMesh.geometry.attributes.normal.setXYZ( i + offset, localDecalGeometry.attributes.normal.getX(i), localDecalGeometry.attributes.normal.getY(i), localDecalGeometry.attributes.normal.getZ(i) );
+                // decalMesh.geometry.index.setX( i + offset, localDecalGeometry.index.getX(i) );
+              }
+              // flag geometry attributes for update
+              decalMesh.geometry.attributes.position.updateRange = {
+                offset: offset*3,
+                count: localDecalGeometry.attributes.position.array.length,
+              };
+              decalMesh.geometry.attributes.position.needsUpdate = true;
+              decalMesh.geometry.attributes.uv.updateRange = {
+                offset: offset*2,
+                count: localDecalGeometry.attributes.uv.array.length,
+              };
+              decalMesh.geometry.attributes.uv.needsUpdate = true;
+              decalMesh.geometry.attributes.normal.updateRange = {
+                offset: offset*3,
+                count: localDecalGeometry.attributes.normal.array.length,
+              };
+              decalMesh.geometry.attributes.normal.needsUpdate = true;
+              // decalMesh.geometry.index.updateRange = {
+              //   offset,
+              //   count: localDecalGeometry.index.count,
+              // };
+              //decalMesh.geometry.index.needsUpdate = true;
+              // update geometry attribute offset
+              decalMesh.offset += localDecalGeometry.attributes.position.count;
+              decalMesh.offset = decalMesh.offset % decalMesh.geometry.attributes.position.count;
+
+              explosionApp.position.fromArray(result.point);
+              explosionApp.quaternion.setFromRotationMatrix(
+                new THREE.Matrix4().lookAt(
+                  explosionApp.position,
+                  explosionApp.position.clone()
+                    .sub(normal),
+                  upVector
                 )
               );
-
-              const hitDirection = targetApp.position.clone()
-                .sub(localPlayer.position);
-              // hitDirection.y = 0;
-              hitDirection.normalize();
+              // explosionApp.scale.copy(gunApp.scale);
+              explosionApp.updateMatrixWorld();
+              explosionApp.setComponent('color1', 0xef5350);
+              explosionApp.setComponent('color2', 0x000000);
+              explosionApp.setComponent('gravity', -0.5);
+              explosionApp.setComponent('rate', 0.5);
+              explosionApp.use();
               
-              // const willDie = targetApp.willDieFrom(damage);
-              targetApp.hit(damage, {
-                type: 'bullet',
-                collisionId: result.objectId,
-                hitPosition,
-                hitDirection,
-                hitQuaternion,
-                // willDie,
-              });
-            } else {
-              console.warn('no app with physics id', result.objectId);
-            }
+              // bulletPointLight.position.copy(explosionApp.position);
+              bulletPointLight.startTime = performance.now();
+              bulletPointLight.endTime = bulletPointLight.startTime + bulletSparkTime;
+            };
+            _renderHitExplosion();
           }
         }
       });
