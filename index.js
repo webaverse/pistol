@@ -368,6 +368,7 @@ export default e => {
               
               // const willDie = targetApp.willDieFrom(damage);
               targetApp.hit(damage, {
+                type: 'bullet',
                 collisionId: result.objectId,
                 hitPosition,
                 hitDirection,
