@@ -217,6 +217,7 @@ export default e => {
 
         // bullet hit
         {
+          const localPlayer = useLocalPlayer();
           const hit = localPlayer.characterHitter.attemptHit({
             type: 'bullet',
             args: {
@@ -226,8 +227,8 @@ export default e => {
           });
           if (hit) {
             const _renderHitExplosion = () => {
-              const normal = new THREE.Vector3().fromArray(result.normal);
-              const newPointVec = new THREE.Vector3().fromArray(result.point);
+              const normal = new THREE.Vector3().fromArray(hit.normal);
+              const newPointVec = new THREE.Vector3().fromArray(hit.point);
               const modiPoint = newPointVec.clone().add(normal.clone().multiplyScalar(0.01));
               
               const pos = modiPoint;
@@ -331,7 +332,7 @@ export default e => {
               decalMesh.offset += localDecalGeometry.attributes.position.count;
               decalMesh.offset = decalMesh.offset % decalMesh.geometry.attributes.position.count;
 
-              explosionApp.position.fromArray(result.point);
+              explosionApp.position.fromArray(hit.point);
               explosionApp.quaternion.setFromRotationMatrix(
                 new THREE.Matrix4().lookAt(
                   explosionApp.position,
@@ -370,7 +371,7 @@ export default e => {
   
   let wearing = false;
   useWear(e => {
-    const {wear} = e;
+    const {wear, player} = e;
     for (const subApp of subApps) {
       subApp.position.copy(app.position);
       subApp.quaternion.copy(app.quaternion);
@@ -380,6 +381,7 @@ export default e => {
       subApp.dispatchEvent({
         type: 'wearupdate',
         wear,
+        player,
       });
     }
     wearing = wear;
