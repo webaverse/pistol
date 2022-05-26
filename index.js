@@ -348,7 +348,7 @@ export default e => {
             bulletPointLight.startTime = performance.now();
             bulletPointLight.endTime = bulletPointLight.startTime + bulletSparkTime;
           
-            if (targetApp) {
+            if (targetApp && targetApp.getComponent('vincibility') !== 'invincible') {
               const localPlayer = useLocalPlayer();
               const damage = 2;
 
