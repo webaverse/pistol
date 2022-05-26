@@ -348,7 +348,7 @@ export default e => {
             bulletPointLight.startTime = performance.now();
             bulletPointLight.endTime = bulletPointLight.startTime + bulletSparkTime;
           
-            if (targetApp) {
+            if (targetApp && targetApp.getComponent('vincibility') !== 'invincible') {
               const localPlayer = useLocalPlayer();
               const damage = 2;
 
@@ -399,7 +399,7 @@ export default e => {
   
   let wearing = false;
   useWear(e => {
-    const {wear} = e;
+    const {wear, player} = e;
     for (const subApp of subApps) {
       subApp.position.copy(app.position);
       subApp.quaternion.copy(app.quaternion);
@@ -408,6 +408,7 @@ export default e => {
       
       subApp.dispatchEvent({
         type: 'wearupdate',
+        player,
         wear,
       });
     }
