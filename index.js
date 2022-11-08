@@ -20,6 +20,8 @@ const fnEmptyArray = () => emptyArray;
 
 export default e => {
   const app = useApp();
+  app.subApps = [];
+  app.hasSubApps = true;
   const physics = usePhysics();
   const scene = useScene();
   
@@ -137,6 +139,7 @@ export default e => {
 
       await explosionApp.addModule(m);
       scene.add(explosionApp);
+      app.subApps.push(explosionApp);
       explosionApp.add( bulletPointLight );
       // metaversefile.addApp(explosionApp);
     }
@@ -199,6 +202,7 @@ export default e => {
       }
       await gunApp.addModule(m);
       scene.add(gunApp);
+      app.subApps.push(gunApp);
       // metaversefile.addApp(gunApp);
       
       gunApp.addEventListener('use', e => {
@@ -235,6 +239,7 @@ export default e => {
               if (!hasTargetApp) {
                 const newDecalMesh = _makeDecalMesh();
                 scene.add(newDecalMesh);
+                app.subApps.push(newDecalMesh);
                 appDecalMeshes.push(newDecalMesh);
                 decalMeshMap.set(targetApp, newDecalMesh);
                 // listening for destroy event on the hit app
@@ -300,6 +305,7 @@ export default e => {
                   debugMesh.position.set(pointVec.x, pointVec.y, pointVec.z);
                   debugMesh.updateWorldMatrix();
                   scene.add(debugMesh);
+                  app.subApps.push(debugMesh);
                 }
 
                 // dummyPosition.position.set(pointVec.x, pointVec.y, pointVec.z);
