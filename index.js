@@ -21,7 +21,6 @@ const fnEmptyArray = () => emptyArray;
 export default e => {
   const app = useApp();
   app.subApps = [];
-  app.hasSubApps = true;
   const physics = usePhysics();
   const scene = useScene();
   
