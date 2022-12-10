@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import metaversefile from 'metaversefile';
 import { MathUtils } from 'three';
-const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysics, useScene, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup, useSound, useKtx2Util} = metaversefile;
+const {useApp, useFrame, useActivate, useWear, useUse, useLocalPlayer, usePhysics, useScene, getNextInstanceId, getAppByPhysicsId, useWorld, useDefaultModules, useCleanup, useSound} = metaversefile;
 
 const {clamp} = MathUtils;
 const baseUrl = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
@@ -37,7 +37,7 @@ export default e => {
   }; */
   const sounds = useSound();
   const soundFiles = sounds.getSoundFiles();
-  const soundIndex = soundFiles.combat.map(sound => sound.name).indexOf('combat/Colt45_Shot2.wav');
+  const soundIndex=soundFiles.combat.map(sound => sound.name).indexOf('combat/Colt45_Shot2.wav');
   
   
   let pointLights = [];
@@ -59,23 +59,23 @@ export default e => {
   // worldLights.add(bulletPointLight);
   pointLights.push(bulletPointLight);
 
+  const textureLoader = new THREE.TextureLoader();
+
   const debugGeo = new THREE.BoxGeometry( 0.01, 0.01, 0.01);
   const debugMat = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+  const decalTextureName = "bulletHole.jpg";
+  const decalTexture = textureLoader.load(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}${ decalTextureName}`);
+  // decalTexture.needsUpdate = true;
   const decalMaterial = new THREE.MeshPhysicalMaterial({
     // color: 0xFF0000,
+    map: decalTexture,
+    alphaMap: decalTexture,
     transparent: true,
     alphaTest: 0.01,
     // depthWrite: true,
     // depthTest: true,
   });
-  (async () => {
-    const {loadKtx2TextureUrl} = useKtx2Util();
-    const decalTextureName = "bulletHole.ktx2";
-    const decalTexture = await loadKtx2TextureUrl(`${import.meta.url.replace(/(\/)[^\/]*$/, '$1')}${ decalTextureName}`);
-    decalMaterial.map = decalTexture;
-    decalMaterial.alphaMap = decalTexture;
-    decalMaterial.needsUpdate = true;
-  })();
+  decalMaterial.needsUpdate = true;
   // const debugMesh = [];
   const debugDecalVertPos = false;
 
@@ -139,7 +139,7 @@ export default e => {
       await explosionApp.addModule(m);
       scene.add(explosionApp);
       appSubApps.push(explosionApp);
-      explosionApp.add(bulletPointLight);
+      explosionApp.add( bulletPointLight );
       // metaversefile.addApp(explosionApp);
     }
     
