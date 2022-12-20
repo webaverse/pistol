@@ -36,6 +36,10 @@ export default e => {
     app.matrixWorld.copy(subApp.matrixWorld);
   }; */
   const sounds = useSound();
+  const soundFiles = sounds.getSoundFiles();
+  const soundIndex=soundFiles.combat.map(sound => sound.name).indexOf('combat/Colt45_Shot2.wav');
+  
+  
   let pointLights = [];
   const gunPointLight = new THREE.PointLight(0xFFFFFF, 5);
   gunPointLight.castShadow = false; 
@@ -483,7 +487,7 @@ export default e => {
   
   useUse(e => {
     if (e.use && gunApp) {
-      sounds.playSound("pistol_single");
+      sounds.playSound(soundFiles.combat[soundIndex]);
       gunApp.use();
     }
   });
